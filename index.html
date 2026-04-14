@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Archive DB</title>
+
+  <!-- カスタムスタイル -->
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <!-- Vueマウントポイント -->
+  <div id="app">
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#aaa">
+      読み込み中...
+    </div>
+  </div>
+
+  <!-- ── CDN ライブラリ ── (順序重要) -->
+  <!-- Vue 3 (テンプレートコンパイラ付きフルビルド) -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Dexie.js v3 (IndexedDB ラッパー) -->
+  <script src="https://unpkg.com/dexie@3/dist/dexie.js"></script>
+  <!-- Marked.js (Markdown → HTML) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- ── アプリケーションスクリプト ── (依存順) -->
+  <script src="db.js"></script>
+  <script src="utils/io.js"></script>
+  <script src="components/StudentList.js"></script>
+  <script src="components/StudentDetail.js"></script>
+  <script src="components/GachaLog.js"></script>
+  <script src="components/StrategyMemo.js"></script>
+  <script src="components/EventLog.js"></script>
+  <script src="components/TeamComposition.js"></script>
+  <script src="components/MaterialManagement.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
