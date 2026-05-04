@@ -20,44 +20,6 @@ const StudentListComponent = {
   inject: ['store'],
   template: `
     <div>
-      <!-- フィルターバー -->
-      <div class="filter-bar">
-        <input type="text" v-model="filters.name" placeholder="名前で検索" style="min-width:120px">
-        <select v-model="filters.school">
-          <option value="">全学校</option>
-          <option v-for="s in SCHOOLS" :key="s" :value="s">{{ s }}</option>
-        </select>
-        <select v-model="filters.role">
-          <option value="">全ロール</option>
-          <option v-for="r in ROLES" :key="r" :value="r">{{ r }}</option>
-        </select>
-        <select v-model="filters.rarity">
-          <option value="">全レア</option>
-          <option value="3">★★★</option>
-          <option value="2">★★</option>
-          <option value="1">★</option>
-        </select>
-        <select v-model="filters.attackType">
-          <option value="">全攻撃</option>
-          <option v-for="t in ATTACK_TYPES" :key="t.value" :value="t.value">{{ t.label }}</option>
-        </select>
-        <select v-model="filters.owned">
-          <option value="">全員</option>
-          <option value="true">所持</option>
-          <option value="false">未所持</option>
-        </select>
-        <select v-model="sortKey" style="min-width:100px">
-          <option value="name">名前順</option>
-          <option value="school">学校順</option>
-          <option value="rarity">レア順</option>
-          <option value="bondLevel">絆Lv順</option>
-          <option value="starRank">絆星順</option>
-          <option value="owned">所持順</option>
-        </select>
-        <button class="btn-secondary" @click="resetFilters">リセット</button>
-        <button style="margin-left:auto" @click="store.openStudentDetail(null)">＋ 新規追加</button>
-      </div>
-
       <!-- 件数表示 -->
       <div class="student-count">
         <span class="count-num">{{ sortedStudents.length }}</span>
@@ -114,23 +76,17 @@ const StudentListComponent = {
     </div>
   `,
 
-  data() {
-    return {
-      filters: { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' },
-      sortKey: 'school',
-    };
-  },
-
   computed: {
     filteredStudents() {
+      const f = this.store.studentFilters;
       return this.store.students.filter(s => {
-        if (this.filters.name && !s.name.includes(this.filters.name)) return false;
-        if (this.filters.school && s.school !== this.filters.school) return false;
-        if (this.filters.role   && s.role   !== this.filters.role)   return false;
-        if (this.filters.rarity && String(s.rarity) !== this.filters.rarity) return false;
-        if (this.filters.attackType && s.attackType !== this.filters.attackType) return false;
-        if (this.filters.owned !== '') {
-          const owned = this.filters.owned === 'true';
+        if (f.name && !s.name.includes(f.name)) return false;
+        if (f.school && s.school !== f.school) return false;
+        if (f.role   && s.role   !== f.role)   return false;
+        if (f.rarity && String(s.rarity) !== f.rarity) return false;
+        if (f.attackType && s.attackType !== f.attackType) return false;
+        if (f.owned !== '') {
+          const owned = f.owned === 'true';
           if (s.owned !== owned) return false;
         }
         return true;
@@ -138,18 +94,19 @@ const StudentListComponent = {
     },
 
     sortedStudents() {
+      const sortKey = this.store.studentSortKey;
       return [...this.filteredStudents].sort((a, b) => {
         // 所持を先に
-        if (this.sortKey === 'owned') {
+        if (sortKey === 'owned') {
           return (b.owned ? 1 : 0) - (a.owned ? 1 : 0);
         }
-        let va = a[this.sortKey];
-        let vb = b[this.sortKey];
+        let va = a[sortKey];
+        let vb = b[sortKey];
         if (va == null) va = '';
         if (vb == null) vb = '';
         if (typeof va === 'boolean') { va = va ? 1 : 0; vb = vb ? 1 : 0; }
         // rarity は降順（高い方が先）
-        if (this.sortKey === 'rarity' || this.sortKey === 'bondLevel' || this.sortKey === 'starRank') {
+        if (sortKey === 'rarity' || sortKey === 'bondLevel' || sortKey === 'starRank') {
           if (va < vb) return 1;
           if (va > vb) return -1;
           return 0;
@@ -169,10 +126,6 @@ const StudentListComponent = {
     async toggleOwned(s) {
       await toggleOwned(s.id, s.owned);
       await this.store.loadStudents();
-    },
-
-    resetFilters() {
-      this.filters = { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' };
     },
 
     attackLabel(val) {

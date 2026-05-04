@@ -18,6 +18,17 @@ const store = Vue.reactive({
   toast: null,
   _toastTimer: null,
 
+  // ── ページ別サイドパネル状態 ─────────────────────────
+  studentFilters: { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' },
+  studentSortKey: 'school',
+  resetStudentFilters() {
+    this.studentFilters = { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' };
+  },
+
+  memoSelectedId: null,
+  memoIsCreating: false,
+  memoSearch: '',
+
   // ── データロード ─────────────────────────────────────────
   async loadStudents() {
     this.students = await getAllStudents();
@@ -71,11 +82,14 @@ const App = {
   },
 
   template: `
-    <div>
+    <div class="app-shell" :class="{ 'sidebar-collapsed': sidebarCollapsed, 'sidebar-mobile-open': sidebarMobileOpen }">
       <!-- ヘッダー & ナビ -->
       <header id="app-header">
         <!-- 上段: タイトル + アクション -->
         <div class="header-top">
+          <button class="sidebar-toggle-btn" @click="toggleSidebar" title="サイドパネル">
+            <span>≡</span>
+          </button>
           <h1>
             <span class="os-bracket">SCHALE</span>Blue Archive DB<span class="os-version">v0.2</span>
           </h1>
@@ -105,24 +119,37 @@ const App = {
         </nav>
       </header>
 
-      <!-- メインコンテンツ -->
-      <main id="main-content">
-        <div v-if="store.activeTab === 'students'">
-          <student-list></student-list>
-        </div>
-        <div v-if="store.activeTab === 'gacha'">
-          <gacha-simulator></gacha-simulator>
-        </div>
-        <div v-if="store.activeTab === 'memos'">
-          <strategy-memo></strategy-memo>
-        </div>
-        <div v-if="store.activeTab === 'teams'">
-          <team-composition></team-composition>
-        </div>
-        <div v-if="store.activeTab === 'materials'">
-          <material-management></material-management>
-        </div>
-      </main>
+      <div class="app-body">
+        <!-- ── サイドパネル ── -->
+        <aside id="app-sidebar" :aria-expanded="!sidebarCollapsed">
+          <div v-if="!sidebarCollapsed" class="sidebar-body">
+            <student-sidebar v-if="store.activeTab === 'students'"></student-sidebar>
+            <memo-sidebar v-if="store.activeTab === 'memos'"></memo-sidebar>
+          </div>
+        </aside>
+
+        <!-- モバイルドラワー背景 -->
+        <div v-if="sidebarMobileOpen" class="sidebar-backdrop" @click="sidebarMobileOpen = false"></div>
+
+        <!-- ── メインエリア ── -->
+        <main id="main-content">
+          <div v-if="store.activeTab === 'students'">
+            <student-list></student-list>
+          </div>
+          <div v-if="store.activeTab === 'gacha'">
+            <gacha-simulator></gacha-simulator>
+          </div>
+          <div v-if="store.activeTab === 'memos'">
+            <strategy-memo></strategy-memo>
+          </div>
+          <div v-if="store.activeTab === 'teams'">
+            <team-composition></team-composition>
+          </div>
+          <div v-if="store.activeTab === 'materials'">
+            <material-management></material-management>
+          </div>
+        </main>
+      </div>
 
       <!-- 生徒詳細モーダル -->
       <student-detail v-if="store.showStudentDetail"></student-detail>
@@ -135,7 +162,18 @@ const App = {
   `,
 
   data() {
-    return { store, clockText: '' };
+    return {
+      store,
+      clockText: '',
+      sidebarCollapsed: JSON.parse(localStorage.getItem('schaleSidebarCollapsed') || 'false'),
+      sidebarMobileOpen: false,
+    };
+  },
+
+  watch: {
+    sidebarCollapsed(v) {
+      localStorage.setItem('schaleSidebarCollapsed', JSON.stringify(v));
+    },
   },
 
   async mounted() {
@@ -150,6 +188,14 @@ const App = {
   },
 
   methods: {
+    toggleSidebar() {
+      if (window.innerWidth <= 768) {
+        this.sidebarMobileOpen = !this.sidebarMobileOpen;
+      } else {
+        this.sidebarCollapsed = !this.sidebarCollapsed;
+      }
+    },
+
     updateClock() {
       const d = new Date();
       const pad = n => String(n).padStart(2, '0');
@@ -191,9 +237,11 @@ const app = Vue.createApp(App);
 
 // コンポーネント登録
 app.component('student-list',        StudentListComponent);
+app.component('student-sidebar',     StudentSidebarComponent);
 app.component('student-detail',      StudentDetailComponent);
 app.component('gacha-simulator',     GachaSimulatorComponent);
 app.component('strategy-memo',       StrategyMemoComponent);
+app.component('memo-sidebar',        MemoSidebarComponent);
 app.component('team-composition',    TeamCompositionComponent);
 app.component('material-management', MaterialManagementComponent);
 

@@ -40,7 +40,17 @@ body {
   font-feature-settings: normal;
 }
 
-/* ── ヘッダー ────────────────────────────────────────────── */
+/* ── アプリシェル ─────────────────────────────────────── */
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-body {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* ── ヘッダー (元の配置) ──────────────────────────────── */
 #app-header {
   background: #ffffff;
   border-bottom: 1.5px solid #3ea8ff;
@@ -158,12 +168,8 @@ body {
 .tab-btn:hover { color: #128afa; }
 .tab-btn:hover::after { transform: scaleX(0.5); }
 
-.tab-btn.active {
-  color: #128afa;
-}
-.tab-btn.active::after {
-  transform: scaleX(1);
-}
+.tab-btn.active { color: #128afa; }
+.tab-btn.active::after { transform: scaleX(1); }
 
 .tab-btn .tab-glyph {
   display: inline-block;
@@ -202,10 +208,177 @@ body {
   color: #ffffff;
 }
 
+.sidebar-toggle-btn {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #c9dcef;
+  background: #ffffff;
+  color: #128afa;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #128afa;
+  color: #ffffff;
+  border-color: #128afa;
+}
+
+/* ── サイドパネル (ヘッダー下に配置) ──────────────────── */
+#app-sidebar {
+  position: sticky;
+  top: 92px;
+  align-self: flex-start;
+  width: 240px;
+  flex-shrink: 0;
+  height: calc(100vh - 92px);
+  background: #ffffff;
+  border-right: 1px solid #c9dcef;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: width 0.22s ease-out;
+}
+
+.app-shell.sidebar-collapsed #app-sidebar {
+  width: 0;
+  border-right: none;
+  overflow: hidden;
+}
+
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section-id {
+  display: block;
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #128afa;
+  margin: 14px 0 6px;
+  padding: 1px 6px;
+  background: rgba(62,168,255,0.08);
+  border-left: 2px solid #3ea8ff;
+  white-space: nowrap;
+}
+
+.sidebar-section-id:first-child { margin-top: 0; }
+
+/* ── サイドパネル内コンテンツ (フォーム) ─────────────── */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.sidebar-field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4a5d75;
+  letter-spacing: 0.04em;
+}
+
+.sidebar-field input,
+.sidebar-field select {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid #c9dcef;
+  border-radius: 2px;
+  background: #f6faff;
+  color: #0d1b2a;
+  outline: none;
+  height: 30px;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.sidebar-field input:focus,
+.sidebar-field select:focus {
+  border-color: #128afa;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(62,168,255,0.18);
+}
+
+.sidebar-add-btn {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid #128afa;
+  background: #128afa;
+  color: #ffffff;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.sidebar-add-btn:hover {
+  background: #0d6dd1;
+  box-shadow: 0 0 12px rgba(62,168,255,0.4);
+}
+
+.sidebar-reset-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid #c9dcef;
+  background: #ffffff;
+  color: #4a5d75;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sidebar-reset-btn:hover {
+  background: #f43f5e;
+  color: #ffffff;
+  border-color: #f43f5e;
+}
+
+/* モバイルドラワー背景 */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13,27,42,0.45);
+  z-index: 150;
+  backdrop-filter: blur(2px);
+  animation: overlayIn 0.18s ease-out;
+}
+
 /* ── メインコンテンツ ─────────────────────────────────── */
 #main-content {
+  flex: 1;
+  min-width: 0;
   padding: 20px;
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -1350,31 +1523,35 @@ body {
 
 /* ── 攻略メモ ─────────────────────────────────────────────── */
 .memo-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 14px;
+  display: flex;
+  flex-direction: column;
   height: calc(100vh - 156px);
   min-height: 500px;
 }
 
-.memo-sidebar {
-  background: #ffffff;
-  border: 1px solid #c9dcef;
-  border-radius: 4px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+/* サイドパネル内のメモリスト */
+.memo-sidebar-panel .memo-list {
+  margin: 8px -12px 0;
+  border-top: 1px solid #c9dcef;
 }
 
-.memo-sidebar h3 {
-  font-size: 12px;
-  font-weight: 700;
-  color: #4a5d75;
-  letter-spacing: 0.02em;
-  padding: 10px 14px 8px;
-  margin: 0;
-  border-bottom: 1px solid #c9dcef;
+.memo-sidebar-panel .memo-item {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.memo-sidebar-panel .memo-category-header {
+  padding: 6px 12px 4px;
   background: #f6faff;
+  border-top: 1px solid #c9dcef;
+}
+
+.memo-sidebar-panel .memo-category-header:first-child {
+  border-top: none;
+}
+
+.memo-sidebar-panel .memo-sidebar-empty {
+  padding: 16px 12px;
 }
 
 .memo-item {
@@ -1397,6 +1574,7 @@ body {
 }
 
 .memo-editor-area {
+  flex: 1;
   background: #ffffff;
   border: 1px solid #c9dcef;
   border-radius: 4px;
@@ -1975,7 +2153,31 @@ body {
 
 /* ── レスポンシブ ──────────────────────────────────────── */
 @media (max-width: 960px) {
-  .memo-layout { grid-template-columns: 1fr; height: auto; }
+  .memo-layout { height: auto; }
+}
+
+@media (max-width: 768px) {
+  /* サイドパネルをドラワー化 */
+  #app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 240px;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease-out;
+    border-right: 1.5px solid #3ea8ff;
+    box-shadow: 4px 0 14px rgba(13,27,42,0.10);
+  }
+  .app-shell.sidebar-mobile-open #app-sidebar {
+    transform: translateX(0);
+  }
+  .app-shell.sidebar-mobile-open .sidebar-backdrop {
+    display: block;
+  }
+  .app-shell.sidebar-collapsed #app-sidebar { width: 240px; }
 }
 
 @media (max-width: 640px) {

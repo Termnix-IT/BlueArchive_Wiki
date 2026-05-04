@@ -6,36 +6,11 @@ const StrategyMemoComponent = {
   inject: ['store'],
   template: `
     <div class="memo-layout">
-      <!-- サイドバー -->
-      <div class="memo-sidebar">
-        <h3>メモ一覧</h3>
-        <div class="memo-sidebar-tools">
-          <input type="text" v-model="search" placeholder="検索..." class="memo-search">
-          <button class="btn-edit" @click="createNew">＋ 新規</button>
-        </div>
-
-        <!-- カテゴリ別メモ一覧 -->
-        <template v-for="cat in MEMO_CATEGORIES" :key="cat.value">
-          <div v-if="memosByCategory[cat.value] && memosByCategory[cat.value].length > 0">
-            <div class="memo-category-header">{{ cat.label }}</div>
-            <div v-for="m in memosByCategory[cat.value]" :key="m.id"
-              class="memo-item" :class="{ active: selectedMemoId === m.id }"
-              @click="selectMemo(m)">
-              {{ m.title || '(無題)' }}
-            </div>
-          </div>
-        </template>
-
-        <div v-if="filteredMemos.length === 0" class="memo-sidebar-empty">
-          メモがありません
-        </div>
-      </div>
-
       <!-- エディタ/プレビューエリア -->
       <div class="memo-editor-area">
         <!-- メモ未選択時 -->
-        <div v-if="!selectedMemoId && !isCreating" class="memo-empty">
-          左のリストから選択するか、「＋ 新規」で作成してください
+        <div v-if="!store.memoSelectedId && !store.memoIsCreating" class="memo-empty">
+          サイドパネルからメモを選択するか、「＋ 新規メモ」で作成してください
         </div>
 
         <template v-else>
@@ -50,7 +25,7 @@ const StrategyMemoComponent = {
             <span style="flex:1"></span>
             <span class="memo-saved-time" v-if="lastSaved">保存: {{ lastSaved }}</span>
             <button class="memo-save-btn" @click="save">保存 (Ctrl+S)</button>
-            <button class="memo-delete-btn" v-if="selectedMemoId" @click="confirmDelete">削除</button>
+            <button class="memo-delete-btn" v-if="store.memoSelectedId" @click="confirmDelete">削除</button>
           </div>
 
           <!-- タイトル入力 -->
@@ -76,61 +51,50 @@ const StrategyMemoComponent = {
 
   data() {
     return {
-      selectedMemoId: null,
-      isCreating: false,
       editTitle: '',
       editContent: '',
       editCategory: 'misc',
       viewMode: 'split',
-      search: '',
       lastSaved: '',
     };
   },
 
   computed: {
-    filteredMemos() {
-      if (!this.search) return this.store.memos;
-      const q = this.search.toLowerCase();
-      return this.store.memos.filter(m =>
-        (m.title || '').toLowerCase().includes(q) ||
-        (m.content || '').toLowerCase().includes(q)
-      );
-    },
-
-    memosByCategory() {
-      const result = {};
-      for (const cat of MEMO_CATEGORIES) {
-        result[cat.value] = this.filteredMemos.filter(m => m.category === cat.value);
-      }
-      return result;
-    },
-
     renderedContent() {
       if (!this.editContent) return '<p style="color:#8aa0b8">プレビューがここに表示されます</p>';
-      // marked.parse は同期的
       return marked.parse(this.editContent);
     },
   },
 
+  watch: {
+    'store.memoSelectedId': {
+      immediate: true,
+      handler(id) {
+        if (id) {
+          const m = this.store.memos.find(x => x.id === id);
+          if (m) {
+            this.editTitle    = m.title    || '';
+            this.editContent  = m.content  || '';
+            this.editCategory = m.category || 'misc';
+            this.lastSaved = '';
+          }
+        }
+      },
+    },
+    'store.memoIsCreating': {
+      immediate: true,
+      handler(creating) {
+        if (creating) {
+          this.editTitle = '';
+          this.editContent = '';
+          this.editCategory = 'misc';
+          this.lastSaved = '';
+        }
+      },
+    },
+  },
+
   methods: {
-    selectMemo(m) {
-      this.selectedMemoId = m.id;
-      this.isCreating = false;
-      this.editTitle   = m.title   || '';
-      this.editContent = m.content || '';
-      this.editCategory = m.category || 'misc';
-      this.lastSaved = '';
-    },
-
-    createNew() {
-      this.selectedMemoId = null;
-      this.isCreating = true;
-      this.editTitle = '';
-      this.editContent = '';
-      this.editCategory = 'misc';
-      this.lastSaved = '';
-    },
-
     async save() {
       if (!this.editTitle.trim()) {
         this.store.showToast('タイトルを入力してください', 'error'); return;
@@ -141,16 +105,18 @@ const StrategyMemoComponent = {
         category: this.editCategory,
         tags: [],
       };
-      if (this.selectedMemoId) memo.id = this.selectedMemoId;
+      if (this.store.memoSelectedId) memo.id = this.store.memoSelectedId;
 
       await saveMemo(memo);
       await this.store.loadMemos();
 
       // 新規の場合は作成されたメモを選択
-      if (!this.selectedMemoId) {
+      if (!this.store.memoSelectedId) {
         const saved = this.store.memos.find(m => m.title === memo.title && m.category === memo.category);
-        if (saved) this.selectedMemoId = saved.id;
-        this.isCreating = false;
+        if (saved) {
+          this.store.memoSelectedId = saved.id;
+          this.store.memoIsCreating = false;
+        }
       }
 
       const now = new Date();
@@ -160,10 +126,10 @@ const StrategyMemoComponent = {
 
     async confirmDelete() {
       if (!confirm(`「${this.editTitle}」を削除しますか？`)) return;
-      await deleteMemo(this.selectedMemoId);
+      await deleteMemo(this.store.memoSelectedId);
       await this.store.loadMemos();
-      this.selectedMemoId = null;
-      this.isCreating = false;
+      this.store.memoSelectedId = null;
+      this.store.memoIsCreating = false;
       this.editTitle = '';
       this.editContent = '';
       this.store.showToast('削除しました', 'info');
