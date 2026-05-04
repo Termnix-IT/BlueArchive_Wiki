@@ -10,7 +10,6 @@ async function exportAllData() {
       students: await db.students.toArray(),
       gacha:    await db.gacha.toArray(),
       memos:    await db.memos.toArray(),
-      events:   await db.events.toArray(),
     };
 
     const json = JSON.stringify(data, null, 2);
@@ -43,7 +42,6 @@ async function importAllData(jsonStr, mode = 'merge') {
       await db.students.clear();
       await db.gacha.clear();
       await db.memos.clear();
-      await db.events.clear();
     }
 
     // id を除去して重複を避ける（bulkAdd は既存 id と衝突しない新 id を付与）
@@ -53,13 +51,11 @@ async function importAllData(jsonStr, mode = 'merge') {
       await db.students.bulkAdd(data.students || []);
       await db.gacha.bulkAdd(data.gacha       || []);
       await db.memos.bulkAdd(data.memos        || []);
-      await db.events.bulkAdd(data.events      || []);
     } else {
       // merge: 既存データを残して追記（名前重複チェックなし、単純追記）
       await db.students.bulkAdd(strip(data.students || []));
       await db.gacha.bulkAdd(strip(data.gacha       || []));
       await db.memos.bulkAdd(strip(data.memos        || []));
-      await db.events.bulkAdd(strip(data.events      || []));
     }
 
     return { ok: true, message: 'インポートが完了しました。' };

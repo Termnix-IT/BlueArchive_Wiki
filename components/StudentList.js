@@ -2,17 +2,18 @@
 //  components/StudentList.js  —  生徒一覧（カードグリッド）
 // ============================================================
 
+// Schale OS パレットに合わせ彩度を抑えた学校カラー
 const SCHOOL_COLORS = {
-  'アビドス':        'linear-gradient(160deg, #e8d090 0%, #c8b060 100%)',
-  'トリニティ':      'linear-gradient(160deg, #f8d8e8 0%, #e0b0c8 100%)',
-  'ゲヘナ':          'linear-gradient(160deg, #f07050 0%, #c84030 100%)',
-  'ミレニアム':      'linear-gradient(160deg, #70a8e8 0%, #4878c0 100%)',
-  'アリウス':        'linear-gradient(160deg, #9878c8 0%, #6848a0 100%)',
-  'レッドウィンター':'linear-gradient(160deg, #d04858 0%, #a02838 100%)',
-  '百鬼夜行':        'linear-gradient(160deg, #7858a8 0%, #503878 100%)',
-  'ヴァルキューレ':  'linear-gradient(160deg, #6070b8 0%, #384888 100%)',
-  'SRT特務班':       'linear-gradient(160deg, #6888a0 0%, #486070 100%)',
-  'シャーレ':        'linear-gradient(160deg, #a0d0f0 0%, #70a8d8 100%)',
+  'アビドス':        'linear-gradient(160deg, #e8d49a 0%, #c4a868 100%)',
+  'トリニティ':      'linear-gradient(160deg, #f8d4e4 0%, #d8a8c0 100%)',
+  'ゲヘナ':          'linear-gradient(160deg, #e8624a 0%, #b03828 100%)',
+  'ミレニアム':      'linear-gradient(160deg, #6ea4e6 0%, #3870b8 100%)',
+  'アリウス':        'linear-gradient(160deg, #9070c0 0%, #604098 100%)',
+  'レッドウィンター':'linear-gradient(160deg, #c84050 0%, #902028 100%)',
+  '百鬼夜行':        'linear-gradient(160deg, #6e50a0 0%, #443070 100%)',
+  'ヴァルキューレ':  'linear-gradient(160deg, #5868a8 0%, #2c3878 100%)',
+  'SRT特務班':       'linear-gradient(160deg, #5a7a98 0%, #3c5468 100%)',
+  'シャーレ':        'linear-gradient(160deg, #98c8ec 0%, #5a90c8 100%)',
 };
 
 const StudentListComponent = {
@@ -58,9 +59,12 @@ const StudentListComponent = {
       </div>
 
       <!-- 件数表示 -->
-      <div style="font-size:12px;color:rgba(0,0,0,0.55);margin-bottom:12px">
-        {{ sortedStudents.length }} 件 / 全 {{ store.students.length }} 件
-        （所持: {{ ownedCount }} 名）
+      <div class="student-count">
+        <span class="count-num">{{ sortedStudents.length }}</span>
+        <span class="count-divider">/</span>
+        <span class="count-total">{{ store.students.length }} 件</span>
+        <span class="count-divider">・</span>
+        <span class="count-owned">所持 {{ ownedCount }} 名</span>
       </div>
 
       <!-- カードグリッド -->
@@ -82,7 +86,7 @@ const StudentListComponent = {
               :class="s.owned ? 'student-card-pin--owned' : 'student-card-pin--unowned'"
               :title="s.owned ? 'クリックで未所持に' : 'クリックで所持に'"
               @click.stop="toggleOwned(s)"
-            >📌</button>
+            >{{ s.owned ? '●' : '○' }}</button>
 
             <!-- 攻撃タイプバッジ (右下) -->
             <span
@@ -103,8 +107,9 @@ const StudentListComponent = {
       </div>
 
       <!-- 0件 -->
-      <div v-else style="text-align:center;color:rgba(0,0,0,0.36);padding:3rem;font-size:14px">
-        条件に一致する生徒がいません
+      <div v-else class="empty-state">
+        <div class="empty-state-mark">該当なし</div>
+        <div class="empty-state-msg">条件に一致する生徒が見つかりません</div>
       </div>
     </div>
   `,

@@ -7,9 +7,10 @@ const StudentDetailComponent = {
   template: `
     <div class="modal-overlay" @click.self="store.closeStudentDetail()">
       <div class="modal-box">
+        <div class="scan-line"></div>
         <div class="modal-header">
-          <h2>{{ isNew ? '生徒を追加' : '生徒を編集' }}</h2>
-          <button class="modal-close" @click="store.closeStudentDetail()">✕</button>
+          <h2>{{ isNew ? '生徒を新規登録' : '生徒情報 #' + (store.selectedStudentId || '?') }}</h2>
+          <button class="modal-close" @click="store.closeStudentDetail()">×</button>
         </div>
 
         <div class="form-grid">
@@ -20,13 +21,13 @@ const StudentDetailComponent = {
             <div class="img-upload-area" @click="$refs.imgInput.click()">
               <img v-if="form.imageData" :src="form.imageData" class="img-preview">
               <div v-else class="img-upload-placeholder">
-                <span style="font-size:2rem">🖼</span>
-                <span style="font-size:13px;color:rgba(0,0,0,0.55);margin-top:4px">クリックして画像を選択</span>
-                <span style="font-size:11px;color:rgba(0,0,0,0.36);margin-top:2px">JPG / PNG / WebP</span>
+                <span class="img-upload-icon">＋</span>
+                <span class="img-upload-text">クリックして画像を選択</span>
+                <span class="img-upload-hint">JPG / PNG / WebP</span>
               </div>
             </div>
             <input type="file" ref="imgInput" accept="image/*" style="display:none" @change="handleImageUpload">
-            <button v-if="form.imageData" class="btn-secondary-modal" style="margin-top:6px;font-size:12px;padding:4px 12px"
+            <button v-if="form.imageData" class="btn-secondary-modal img-remove-btn"
               @click="form.imageData = ''">画像を削除</button>
           </div>
 
@@ -153,28 +154,25 @@ const StudentDetailComponent = {
           <!-- 必要素材 -->
           <div class="form-group full-width">
             <label>必要素材</label>
-            <div v-if="store.materials.length === 0" style="font-size:14px;color:rgba(0,0,0,0.36);margin-bottom:8px">
+            <div v-if="store.materials.length === 0" class="need-empty">
               素材管理タブで素材を先に登録してください
             </div>
-            <div v-else style="display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+            <div v-else class="need-add-row">
               <select v-model="newNeedMaterialId" style="flex:1;min-width:140px">
                 <option value="">素材を選択</option>
                 <option v-for="m in store.materials" :key="m.id" :value="m.id">{{ m.name }}</option>
               </select>
               <input type="number" v-model.number="newNeedQuantity" min="1" style="width:80px" placeholder="数量">
-              <button class="btn-edit" @click="addNeededMaterial">追加</button>
+              <button class="btn-edit" @click="addNeededMaterial">＋ 追加</button>
             </div>
-            <div v-if="form.neededMaterials && form.neededMaterials.length > 0"
-              style="border:1px solid #d6e3ed;border-radius:8px;overflow:hidden">
-              <div v-for="(need, idx) in form.neededMaterials" :key="idx"
-                style="display:flex;align-items:center;padding:6px 12px;border-bottom:1px solid #d6e3ed;gap:8px">
-                <span style="flex:1;font-size:14px">{{ need.materialName }}</span>
-                <span style="font-size:13px;color:rgba(0,0,0,0.55)">× {{ need.quantity }}</span>
-                <button style="background:none;border:none;color:#f43f5e;cursor:pointer;padding:0 4px;font-size:16px;line-height:1"
-                  @click="removeNeededMaterial(idx)">✕</button>
+            <div v-if="form.neededMaterials && form.neededMaterials.length > 0" class="need-list">
+              <div v-for="(need, idx) in form.neededMaterials" :key="idx" class="need-list-row">
+                <span class="need-list-name">{{ need.materialName }}</span>
+                <span class="need-list-qty">× {{ need.quantity }}</span>
+                <button class="need-list-remove" @click="removeNeededMaterial(idx)">×</button>
               </div>
             </div>
-            <div v-else style="font-size:14px;color:rgba(0,0,0,0.36)">必要素材なし</div>
+            <div v-else class="need-empty">必要素材なし</div>
           </div>
         </div>
 

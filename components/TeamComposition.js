@@ -7,12 +7,12 @@ const TeamCompositionComponent = {
   template: `
     <div>
       <!-- 追加/編集フォーム -->
-      <div class="gacha-panel" style="margin-bottom:1rem">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;cursor:pointer"
-          @click="toggleForm">
-          <h3 style="margin:0;font-size:0.95rem">{{ showForm ? '▼' : '▶' }} {{ editingTeam ? 'チームを編集' : 'チームを追加' }}</h3>
+      <div class="collapsible-form">
+        <div class="event-form-toggle" @click="toggleForm">
+          <span class="form-toggle-title">{{ editingTeam ? 'チームを編集' : 'チームを追加' }}</span>
+          <span class="form-toggle-mark">{{ showForm ? '閉じる ▲' : '開く ▼' }}</span>
         </div>
-        <div v-if="showForm">
+        <div v-if="showForm" style="margin-top:12px">
           <div class="form-grid">
             <div class="form-group">
               <label>編成名 *</label>
@@ -27,33 +27,31 @@ const TeamCompositionComponent = {
 
             <!-- ストライカー選択 -->
             <div class="form-group full-width">
-              <label>ストライカー（最大4名）</label>
-              <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.4rem">
+              <label>ストライカー (最大4名)</label>
+              <div class="team-tag-row">
                 <span v-for="sid in form.strikers" :key="'st-'+sid"
                   class="member-tag member-tag-striker">
                   {{ studentName(sid) }}
-                  <span class="member-tag-remove" @click="removeMember('strikers', sid)">✕</span>
+                  <span class="member-tag-remove" @click="removeMember('strikers', sid)">×</span>
                 </span>
-                <button v-if="form.strikers.length < 4" class="btn-edit"
-                  style="font-size:0.8rem;padding:0.2rem 0.5rem"
-                  @click="openMemberModal('strikers')">+ 追加</button>
-                <span v-if="form.strikers.length === 0" style="color:#aaa;font-size:0.85rem">未選択</span>
+                <button v-if="form.strikers.length < 4" class="btn-edit team-add-btn"
+                  @click="openMemberModal('strikers')">＋ 追加</button>
+                <span v-if="form.strikers.length === 0" class="team-empty-label">未選択</span>
               </div>
             </div>
 
             <!-- スペシャル選択 -->
             <div class="form-group full-width">
-              <label>スペシャル（最大2名）</label>
-              <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.4rem">
+              <label>スペシャル (最大2名)</label>
+              <div class="team-tag-row">
                 <span v-for="sid in form.specials" :key="'sp-'+sid"
                   class="member-tag member-tag-special">
                   {{ studentName(sid) }}
-                  <span class="member-tag-remove" @click="removeMember('specials', sid)">✕</span>
+                  <span class="member-tag-remove" @click="removeMember('specials', sid)">×</span>
                 </span>
-                <button v-if="form.specials.length < 2" class="btn-edit"
-                  style="font-size:0.8rem;padding:0.2rem 0.5rem"
-                  @click="openMemberModal('specials')">+ 追加</button>
-                <span v-if="form.specials.length === 0" style="color:#aaa;font-size:0.85rem">未選択</span>
+                <button v-if="form.specials.length < 2" class="btn-edit team-add-btn"
+                  @click="openMemberModal('specials')">+ ADD</button>
+                <span v-if="form.specials.length === 0" class="team-empty-label">未選択</span>
               </div>
             </div>
 
@@ -63,7 +61,7 @@ const TeamCompositionComponent = {
               <textarea v-model="form.notes" rows="3" placeholder="立ち回りや注意点など..."></textarea>
             </div>
           </div>
-          <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem">
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
             <button class="btn-secondary-modal" @click="cancelForm">キャンセル</button>
             <button class="btn-primary" @click="saveTeamForm">保存</button>
           </div>
@@ -71,21 +69,20 @@ const TeamCompositionComponent = {
       </div>
 
       <!-- フィルターバー -->
-      <div class="filter-bar" style="margin-bottom:1rem">
+      <div class="filter-bar" style="margin-top:14px">
         <select v-model="filter.purpose" style="min-width:130px">
           <option value="">すべての用途</option>
           <option v-for="p in TEAM_PURPOSES" :key="p.value" :value="p.value">{{ p.label }}</option>
         </select>
         <input type="text" v-model="filter.name" placeholder="編成名で検索" style="min-width:160px">
-        <span style="font-size:0.8rem;color:#888">{{ filteredTeams.length }} 件</span>
+        <span class="filter-count">{{ filteredTeams.length }} 件</span>
       </div>
 
       <!-- チームカードグリッド -->
       <div class="event-grid">
         <div v-for="team in filteredTeams" :key="team.id"
           class="event-card team-card">
-          <!-- ヘッダー -->
-          <div class="event-card-header" style="margin-bottom:0.5rem">
+          <div class="event-card-header" style="margin-bottom:8px">
             <span class="event-name">{{ team.name }}</span>
             <span class="badge" :class="'badge-purpose-' + team.purpose">
               {{ purposeLabel(team.purpose) }}
@@ -93,9 +90,9 @@ const TeamCompositionComponent = {
           </div>
 
           <!-- ストライカー -->
-          <div style="margin-bottom:0.3rem">
-            <span style="font-size:0.75rem;color:#888;font-weight:600">ST: </span>
-            <span v-if="teamStudents(team.strikers).length === 0" style="font-size:0.8rem;color:#aaa">未設定</span>
+          <div class="team-row">
+            <span class="team-row-label">ST</span>
+            <span v-if="teamStudents(team.strikers).length === 0" class="team-empty-label">未設定</span>
             <span v-for="s in teamStudents(team.strikers)" :key="s.id"
               class="member-chip member-chip-striker" :title="s.school + ' / ' + s.role">
               {{ s.name }}
@@ -103,9 +100,9 @@ const TeamCompositionComponent = {
           </div>
 
           <!-- スペシャル -->
-          <div style="margin-bottom:0.5rem">
-            <span style="font-size:0.75rem;color:#888;font-weight:600">SP: </span>
-            <span v-if="teamStudents(team.specials).length === 0" style="font-size:0.8rem;color:#aaa">未設定</span>
+          <div class="team-row">
+            <span class="team-row-label">SP</span>
+            <span v-if="teamStudents(team.specials).length === 0" class="team-empty-label">未設定</span>
             <span v-for="s in teamStudents(team.specials)" :key="s.id"
               class="member-chip member-chip-special" :title="s.school + ' / ' + s.role">
               {{ s.name }}
@@ -113,56 +110,55 @@ const TeamCompositionComponent = {
           </div>
 
           <!-- メモ -->
-          <div v-if="team.notes" style="font-size:0.8rem;color:#666;border-top:1px solid #eee;padding-top:0.4rem;margin-bottom:0.5rem;white-space:pre-wrap">
-            {{ team.notes }}
-          </div>
+          <div v-if="team.notes" class="team-notes">{{ team.notes }}</div>
 
           <!-- 操作ボタン -->
-          <div style="display:flex;gap:0.4rem;justify-content:flex-end">
+          <div class="event-actions" style="gap:6px">
             <button class="btn-edit" @click="editTeam(team)">編集</button>
             <button class="btn-edit btn-danger" @click="removeTeam(team)">削除</button>
           </div>
         </div>
 
-        <div v-if="filteredTeams.length === 0"
-          style="text-align:center;color:#aaa;padding:3rem;grid-column:1/-1">
-          編成が登録されていません
+        <div v-if="filteredTeams.length === 0" class="empty-state" style="grid-column:1/-1">
+          <div class="empty-state-mark">該当なし</div>
+          <div class="empty-state-msg">編成が登録されていません</div>
         </div>
       </div>
 
       <!-- メンバー選択モーダル -->
       <div v-if="showMemberModal" class="modal-overlay" @click.self="showMemberModal = false">
         <div class="modal-box" style="max-width:500px">
+          <div class="scan-line"></div>
           <div class="modal-header">
             <h2>{{ selectingFor === 'strikers' ? 'ストライカーを選択' : 'スペシャルを選択' }}</h2>
-            <button class="modal-close" @click="showMemberModal = false">✕</button>
+            <button class="modal-close" @click="showMemberModal = false">×</button>
           </div>
-          <div style="margin-bottom:0.5rem">
-            <input type="text" v-model="memberSearch" placeholder="名前で検索" style="width:100%">
+          <div style="margin-bottom:8px">
+            <input type="text" v-model="memberSearch" placeholder="名前で検索" class="member-modal-search">
           </div>
-          <div style="max-height:400px;overflow-y:auto">
-            <!-- 所持生徒を上部に表示 -->
+          <div style="max-height:400px;overflow-y:auto;border:1px solid #c9dcef;border-radius:2px">
             <div v-for="s in filteredModalStudents" :key="s.id"
               class="member-select-row"
               :class="{ selected: isSelected(s.id), disabled: isDisabled(s.id) }"
               @click="toggleMember(s.id)">
-              <span style="flex:1;font-weight:600">{{ s.name }}</span>
-              <span style="font-size:0.75rem;color:#888">{{ s.school }}</span>
-              <span class="badge" :class="'badge-' + s.position === 'striker' ? 'badge-striker' : 'badge-special-pos'"
-                style="margin-left:0.3rem;font-size:0.7rem">
+              <span style="flex:1;font-weight:700">{{ s.name }}</span>
+              <span class="member-row-school">{{ s.school }}</span>
+              <span class="badge" :class="s.position === 'striker' ? 'badge-striker' : 'badge-special-pos'"
+                style="margin-left:6px">
                 {{ s.position === 'striker' ? 'ST' : 'SP' }}
               </span>
-              <span v-if="!s.owned" style="font-size:0.75rem;color:#aaa;margin-left:0.3rem">未所持</span>
-              <span v-if="isSelected(s.id)" style="color:#10b981;margin-left:0.3rem">✓</span>
+              <span v-if="!s.owned" class="member-row-tag-unowned">未所持</span>
+              <span v-if="isSelected(s.id)" class="member-row-check">✓</span>
             </div>
-            <div v-if="filteredModalStudents.length === 0" style="text-align:center;color:#aaa;padding:2rem">
-              該当する生徒がいません
+            <div v-if="filteredModalStudents.length === 0" class="empty-state" style="padding:30px 20px">
+              <div class="empty-state-mark">該当なし</div>
             </div>
           </div>
           <div class="modal-footer">
-            <span style="flex:1;font-size:0.85rem;color:#888">
+            <span class="member-modal-count">
               {{ selectingFor === 'strikers' ? form.strikers.length + '/4' : form.specials.length + '/2' }} 名選択中
             </span>
+            <span style="flex:1"></span>
             <button class="btn-primary" @click="showMemberModal = false">完了</button>
           </div>
         </div>

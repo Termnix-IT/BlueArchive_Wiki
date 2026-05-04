@@ -7,12 +7,12 @@ const MaterialManagementComponent = {
   template: `
     <div>
       <!-- 追加/編集フォーム -->
-      <div class="gacha-panel" style="margin-bottom:1rem">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;cursor:pointer"
-          @click="toggleForm">
-          <h3 style="margin:0;font-size:0.95rem">{{ showForm ? '▼' : '▶' }} {{ editingMaterial ? '素材を編集' : '素材を追加' }}</h3>
+      <div class="collapsible-form">
+        <div class="event-form-toggle" @click="toggleForm">
+          <span class="form-toggle-title">{{ editingMaterial ? '素材を編集' : '素材を追加' }}</span>
+          <span class="form-toggle-mark">{{ showForm ? '閉じる ▲' : '開く ▼' }}</span>
         </div>
-        <div v-if="showForm">
+        <div v-if="showForm" style="margin-top:12px">
           <div class="form-grid">
             <div class="form-group">
               <label>素材名 *</label>
@@ -33,7 +33,7 @@ const MaterialManagementComponent = {
               <input type="text" v-model="form.notes" placeholder="任意のメモ">
             </div>
           </div>
-          <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem">
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
             <button class="btn-secondary-modal" @click="cancelForm">キャンセル</button>
             <button class="btn-primary" @click="saveMaterialForm">保存</button>
           </div>
@@ -41,17 +41,17 @@ const MaterialManagementComponent = {
       </div>
 
       <!-- フィルターバー -->
-      <div class="filter-bar" style="margin-bottom:1rem">
+      <div class="filter-bar" style="margin-top:14px">
         <select v-model="filter.type" style="min-width:140px">
           <option value="">すべてのカテゴリ</option>
           <option v-for="t in MATERIAL_TYPES" :key="t.value" :value="t.value">{{ t.label }}</option>
         </select>
         <input type="text" v-model="filter.name" placeholder="名前で検索" style="min-width:160px">
-        <span style="font-size:0.8rem;color:#888">{{ filteredMaterials.length }} 件</span>
+        <span class="filter-count">{{ filteredMaterials.length }} 件</span>
       </div>
 
       <!-- 素材一覧テーブル -->
-      <div style="overflow-x:auto;margin-bottom:2rem">
+      <div style="overflow-x:auto;margin-bottom:24px;margin-top:14px">
         <table class="data-table" style="width:100%">
           <thead>
             <tr>
@@ -63,28 +63,31 @@ const MaterialManagementComponent = {
           </thead>
           <tbody>
             <tr v-for="mat in filteredMaterials" :key="mat.id">
-              <td style="font-weight:600">
+              <td style="font-weight:700">
                 {{ mat.name }}
-                <span v-if="mat.notes" style="font-size:0.75rem;color:#888;margin-left:0.3rem">{{ mat.notes }}</span>
+                <span v-if="mat.notes" class="mat-note">{{ mat.notes }}</span>
               </td>
               <td>
                 <span class="badge badge-mat-type">{{ typeLabel(mat.type) }}</span>
               </td>
               <td style="text-align:center">
-                <div style="display:flex;align-items:center;justify-content:center;gap:0.3rem">
-                  <button class="qty-btn" @click="adjustQuantity(mat, -1)" :disabled="mat.quantity <= 0">－</button>
-                  <span style="min-width:2.5rem;text-align:center;font-weight:600">{{ mat.quantity }}</span>
-                  <button class="qty-btn" @click="adjustQuantity(mat, 1)">＋</button>
+                <div class="qty-control">
+                  <button class="qty-btn" @click="adjustQuantity(mat, -1)" :disabled="mat.quantity <= 0">−</button>
+                  <span class="qty-value">{{ mat.quantity }}</span>
+                  <button class="qty-btn" @click="adjustQuantity(mat, 1)">+</button>
                 </div>
               </td>
               <td style="text-align:right;white-space:nowrap">
                 <button class="btn-edit" @click="editMaterial(mat)">編集</button>
-                <button class="btn-edit btn-danger" style="margin-left:0.3rem" @click="removeMaterial(mat)">削除</button>
+                <button class="btn-edit btn-danger" style="margin-left:4px" @click="removeMaterial(mat)">削除</button>
               </td>
             </tr>
             <tr v-if="filteredMaterials.length === 0">
-              <td colspan="4" style="text-align:center;color:#aaa;padding:2rem">
-                素材が登録されていません
+              <td colspan="4">
+                <div class="empty-state" style="padding:30px 20px">
+                  <div class="empty-state-mark">該当なし</div>
+                  <div class="empty-state-msg">素材が登録されていません</div>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -92,16 +95,16 @@ const MaterialManagementComponent = {
       </div>
 
       <!-- 生徒別必要素材 -->
-      <div class="gacha-panel">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;cursor:pointer"
-          @click="showStudentNeeds = !showStudentNeeds">
-          <h3 style="margin:0;font-size:0.95rem">{{ showStudentNeeds ? '▼' : '▶' }} 生徒別必要素材</h3>
-          <span v-if="shortageList.length > 0" style="font-size:0.8rem;color:#f43f5e">
-            ⚠ {{ shortageList.length }} 件不足
+      <div class="collapsible-form">
+        <div class="event-form-toggle" @click="showStudentNeeds = !showStudentNeeds">
+          <span class="form-toggle-title">生徒別必要素材</span>
+          <span class="form-toggle-mark">
+            <span v-if="shortageList.length > 0" class="shortage-warn">⚠ {{ shortageList.length }} 件不足</span>
+            {{ showStudentNeeds ? '閉じる ▲' : '開く ▼' }}
           </span>
         </div>
-        <div v-if="showStudentNeeds">
-          <div v-if="studentNeedsList.length === 0" style="color:#aaa;font-size:0.85rem;padding:1rem 0">
+        <div v-if="showStudentNeeds" style="margin-top:12px">
+          <div v-if="studentNeedsList.length === 0" class="need-empty">
             生徒の詳細編集から必要素材を設定してください
           </div>
           <table v-else class="data-table" style="width:100%">
@@ -109,7 +112,7 @@ const MaterialManagementComponent = {
               <tr>
                 <th style="text-align:left">生徒</th>
                 <th style="text-align:left">素材</th>
-                <th style="text-align:center">必要数</th>
+                <th style="text-align:center">必要</th>
                 <th style="text-align:center">在庫</th>
                 <th style="text-align:center">過不足</th>
               </tr>
@@ -117,13 +120,12 @@ const MaterialManagementComponent = {
             <tbody>
               <tr v-for="row in studentNeedsList" :key="row.studentId + '-' + row.materialId"
                 :class="{ 'shortage-row': row.diff < 0 }">
-                <td style="font-weight:600">{{ row.studentName }}</td>
+                <td style="font-weight:700">{{ row.studentName }}</td>
                 <td>{{ row.materialName }}</td>
                 <td style="text-align:center">{{ row.needed }}</td>
                 <td style="text-align:center">{{ row.stock }}</td>
-                <td style="text-align:center" :style="{ color: row.diff < 0 ? '#f43f5e' : '#10b981' }">
+                <td style="text-align:center" :class="row.diff < 0 ? 'diff-neg' : 'diff-pos'">
                   {{ row.diff >= 0 ? '+' + row.diff : row.diff }}
-                  <span v-if="row.diff < 0"> ⚠</span>
                 </td>
               </tr>
             </tbody>

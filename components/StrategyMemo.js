@@ -8,14 +8,11 @@ const StrategyMemoComponent = {
     <div class="memo-layout">
       <!-- サイドバー -->
       <div class="memo-sidebar">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
-          <span style="font-size:0.85rem;font-weight:bold;color:#555">攻略メモ</span>
-          <button class="btn-edit" @click="createNew">＋</button>
+        <h3>メモ一覧</h3>
+        <div class="memo-sidebar-tools">
+          <input type="text" v-model="search" placeholder="検索..." class="memo-search">
+          <button class="btn-edit" @click="createNew">＋ 新規</button>
         </div>
-
-        <!-- 検索 -->
-        <input type="text" v-model="search" placeholder="検索..."
-          style="width:100%;padding:0.3rem 0.5rem;font-size:0.8rem;border-radius:5px;border:1px solid #ccc;margin-bottom:0.5rem;box-sizing:border-box">
 
         <!-- カテゴリ別メモ一覧 -->
         <template v-for="cat in MEMO_CATEGORIES" :key="cat.value">
@@ -29,7 +26,7 @@ const StrategyMemoComponent = {
           </div>
         </template>
 
-        <div v-if="filteredMemos.length === 0" style="color:#aaa;font-size:0.8rem;padding:0.5rem">
+        <div v-if="filteredMemos.length === 0" class="memo-sidebar-empty">
           メモがありません
         </div>
       </div>
@@ -38,22 +35,22 @@ const StrategyMemoComponent = {
       <div class="memo-editor-area">
         <!-- メモ未選択時 -->
         <div v-if="!selectedMemoId && !isCreating" class="memo-empty">
-          左のリストからメモを選択するか、「＋」で新規作成してください
+          左のリストから選択するか、「＋ 新規」で作成してください
         </div>
 
         <template v-else>
           <!-- ツールバー -->
           <div class="memo-toolbar">
-            <select v-model="editCategory" style="font-size:0.8rem;padding:0.25rem;border-radius:4px;border:1px solid #ccc">
+            <select v-model="editCategory" class="memo-category-select">
               <option v-for="c in MEMO_CATEGORIES" :key="c.value" :value="c.value">{{ c.label }}</option>
             </select>
             <button :class="{ 'active-mode': viewMode === 'edit' }"   @click="viewMode = 'edit'">編集</button>
             <button :class="{ 'active-mode': viewMode === 'split' }"  @click="viewMode = 'split'">分割</button>
             <button :class="{ 'active-mode': viewMode === 'preview' }" @click="viewMode = 'preview'">プレビュー</button>
             <span style="flex:1"></span>
-            <span style="font-size:0.75rem;color:#aaa" v-if="lastSaved">保存: {{ lastSaved }}</span>
-            <button @click="save" style="background:#3ea8ff;color:#fff;border-color:#3ea8ff">保存 (Ctrl+S)</button>
-            <button v-if="selectedMemoId" @click="confirmDelete" style="background:#f43f5e;color:#fff;border-color:#f43f5e">削除</button>
+            <span class="memo-saved-time" v-if="lastSaved">保存: {{ lastSaved }}</span>
+            <button class="memo-save-btn" @click="save">保存 (Ctrl+S)</button>
+            <button class="memo-delete-btn" v-if="selectedMemoId" @click="confirmDelete">削除</button>
           </div>
 
           <!-- タイトル入力 -->
@@ -109,7 +106,7 @@ const StrategyMemoComponent = {
     },
 
     renderedContent() {
-      if (!this.editContent) return '<p style="color:#aaa">プレビューがここに表示されます</p>';
+      if (!this.editContent) return '<p style="color:#8aa0b8">プレビューがここに表示されます</p>';
       // marked.parse は同期的
       return marked.parse(this.editContent);
     },

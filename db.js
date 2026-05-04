@@ -157,26 +157,6 @@ async function deleteMemo(id) {
 }
 
 // ============================================================
-//  イベント CRUD
-// ============================================================
-async function getAllEvents() {
-  const events = await db.events.toArray();
-  return events.sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
-}
-
-async function saveEvent(event) {
-  if (event.id) {
-    await db.events.put(event);
-  } else {
-    await db.events.add(event);
-  }
-}
-
-async function deleteEvent(id) {
-  await db.events.delete(id);
-}
-
-// ============================================================
 //  チーム編成 CRUD
 // ============================================================
 async function getAllTeams() {
@@ -249,14 +229,6 @@ const MEMO_CATEGORIES = [
   { value: "raid",           label: "ホードレイド" },
   { value: "event",          label: "イベント" },
   { value: "misc",           label: "その他" },
-];
-
-const EVENT_TYPES = [
-  { value: "story",   label: "ストーリー" },
-  { value: "raid",    label: "レイド" },
-  { value: "collab",  label: "コラボ" },
-  { value: "rerun",   label: "復刻" },
-  { value: "limited", label: "期間限定" },
 ];
 
 const TEAM_PURPOSES = [
