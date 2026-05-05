@@ -11,28 +11,30 @@ const MemoSidebarComponent = {
         ＋ 新規メモ
       </button>
 
-      <div class="sidebar-section-id">// MEMO_LIST</div>
+      <div class="sidebar-section-id">
+        // MEMO_LIST ({{ store.memos.length }})
+      </div>
 
       <div class="sidebar-field">
         <input type="text" v-model="store.memoSearch" placeholder="検索...">
       </div>
 
       <div class="memo-list">
-        <template v-for="cat in MEMO_CATEGORIES" :key="cat.value">
-          <template v-if="memosByCategory[cat.value] && memosByCategory[cat.value].length > 0">
-            <div class="memo-category-header">{{ cat.label }}</div>
-            <div v-for="m in memosByCategory[cat.value]" :key="m.id"
-              class="memo-item"
-              :class="{ active: store.memoSelectedId === m.id }"
-              @click="selectMemo(m.id)">
-              {{ m.title || '(無題)' }}
-            </div>
-          </template>
-        </template>
-
         <div v-if="filteredMemos.length === 0" class="memo-sidebar-empty">
-          メモがありません
+          {{ store.memoSearch ? '該当なし' : 'メモがありません' }}
         </div>
+
+        <template v-for="row in groupedMemos" :key="row.key">
+          <div v-if="row.type === 'header'" class="memo-category-header">
+            {{ row.label }}
+          </div>
+          <div v-else
+            class="memo-item"
+            :class="{ active: store.memoSelectedId === row.memo.id }"
+            @click="selectMemo(row.memo.id)">
+            {{ row.memo.title || '(無題)' }}
+          </div>
+        </template>
       </div>
     </div>
   `,
@@ -40,19 +42,26 @@ const MemoSidebarComponent = {
   computed: {
     filteredMemos() {
       const q = (this.store.memoSearch || '').toLowerCase();
-      if (!q) return this.store.memos;
-      return this.store.memos.filter(m =>
+      const memos = this.store.memos;
+      if (!q) return memos;
+      return memos.filter(m =>
         (m.title || '').toLowerCase().includes(q) ||
         (m.content || '').toLowerCase().includes(q)
       );
     },
 
-    memosByCategory() {
-      const result = {};
+    /** カテゴリヘッダーとメモ項目を1次元配列にフラット化 */
+    groupedMemos() {
+      const rows = [];
       for (const cat of MEMO_CATEGORIES) {
-        result[cat.value] = this.filteredMemos.filter(m => m.category === cat.value);
+        const items = this.filteredMemos.filter(m => m.category === cat.value);
+        if (items.length === 0) continue;
+        rows.push({ type: 'header', key: 'h-' + cat.value, label: cat.label });
+        for (const m of items) {
+          rows.push({ type: 'item', key: 'm-' + m.id, memo: m });
+        }
       }
-      return result;
+      return rows;
     },
   },
 
