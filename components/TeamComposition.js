@@ -27,14 +27,14 @@ const TeamCompositionComponent = {
 
             <!-- ストライカー選択 -->
             <div class="form-group full-width">
-              <label>ストライカー (最大4名)</label>
+              <label>ストライカー (最大{{ maxStriker }}名)</label>
               <div class="team-tag-row">
                 <span v-for="sid in form.strikers" :key="'st-'+sid"
                   class="member-tag member-tag-striker">
                   {{ studentName(sid) }}
                   <span class="member-tag-remove" @click="removeMember('strikers', sid)">×</span>
                 </span>
-                <button v-if="form.strikers.length < 4" class="btn-edit team-add-btn"
+                <button v-if="form.strikers.length < maxStriker" class="btn-edit team-add-btn"
                   @click="openMemberModal('strikers')">＋ 追加</button>
                 <span v-if="form.strikers.length === 0" class="team-empty-label">未選択</span>
               </div>
@@ -42,15 +42,15 @@ const TeamCompositionComponent = {
 
             <!-- スペシャル選択 -->
             <div class="form-group full-width">
-              <label>スペシャル (最大2名)</label>
+              <label>スペシャル (最大{{ maxSpecial }}名)</label>
               <div class="team-tag-row">
                 <span v-for="sid in form.specials" :key="'sp-'+sid"
                   class="member-tag member-tag-special">
                   {{ studentName(sid) }}
                   <span class="member-tag-remove" @click="removeMember('specials', sid)">×</span>
                 </span>
-                <button v-if="form.specials.length < 2" class="btn-edit team-add-btn"
-                  @click="openMemberModal('specials')">+ ADD</button>
+                <button v-if="form.specials.length < maxSpecial" class="btn-edit team-add-btn"
+                  @click="openMemberModal('specials')">＋ 追加</button>
                 <span v-if="form.specials.length === 0" class="team-empty-label">未選択</span>
               </div>
             </div>
@@ -68,14 +68,11 @@ const TeamCompositionComponent = {
         </div>
       </div>
 
-      <!-- フィルターバー -->
-      <div class="filter-bar" style="margin-top:14px">
-        <select v-model="filter.purpose" style="min-width:130px">
-          <option value="">すべての用途</option>
-          <option v-for="p in TEAM_PURPOSES" :key="p.value" :value="p.value">{{ p.label }}</option>
-        </select>
-        <input type="text" v-model="filter.name" placeholder="編成名で検索" style="min-width:160px">
-        <span class="filter-count">{{ filteredTeams.length }} 件</span>
+      <!-- 件数表示 -->
+      <div class="student-count" style="margin-top:14px">
+        <span class="count-num">{{ filteredTeams.length }}</span>
+        <span class="count-divider">件 ・</span>
+        <span class="count-total">{{ currentModeLabel }}</span>
       </div>
 
       <!-- チームカードグリッド -->
@@ -156,7 +153,7 @@ const TeamCompositionComponent = {
           </div>
           <div class="modal-footer">
             <span class="member-modal-count">
-              {{ selectingFor === 'strikers' ? form.strikers.length + '/4' : form.specials.length + '/2' }} 名選択中
+              {{ selectingFor === 'strikers' ? form.strikers.length + '/' + maxStriker : form.specials.length + '/' + maxSpecial }} 名選択中
             </span>
             <span style="flex:1"></span>
             <button class="btn-primary" @click="showMemberModal = false">完了</button>
@@ -171,7 +168,6 @@ const TeamCompositionComponent = {
       showForm: false,
       editingTeam: null,
       form: this.initForm(),
-      filter: { purpose: '', name: '' },
       showMemberModal: false,
       selectingFor: 'strikers',
       memberSearch: '',
@@ -179,10 +175,24 @@ const TeamCompositionComponent = {
   },
 
   computed: {
+    currentModeLabel() {
+      const m = TEAM_MODES.find(m => m.value === this.store.teamMode);
+      return m ? m.label : '';
+    },
+    formMode() {
+      return TEAM_MODES.find(m => m.value === this.form.mode) || TEAM_MODES[0];
+    },
+    maxStriker() { return this.formMode.striker; },
+    maxSpecial() { return this.formMode.special; },
+
     filteredTeams() {
+      const f = this.store.teamFilter;
+      const mode = this.store.teamMode;
       return this.store.teams.filter(t => {
-        if (this.filter.purpose && t.purpose !== this.filter.purpose) return false;
-        if (this.filter.name && !t.name.includes(this.filter.name)) return false;
+        const tMode = t.mode || 'normal';
+        if (tMode !== mode) return false;
+        if (f.purpose && t.purpose !== f.purpose) return false;
+        if (f.name && !t.name.includes(f.name)) return false;
         return true;
       });
     },
@@ -199,13 +209,14 @@ const TeamCompositionComponent = {
 
   methods: {
     initForm() {
-      return { name: '', purpose: 'total_assault', strikers: [], specials: [], notes: '' };
+      return { name: '', purpose: 'total_assault', strikers: [], specials: [], notes: '', mode: 'normal' };
     },
 
     toggleForm() {
       if (this.showForm && !this.editingTeam) {
         this.showForm = false;
       } else if (!this.showForm) {
+        this.form = { ...this.initForm(), mode: this.store.teamMode };
         this.showForm = true;
       }
     },
@@ -218,6 +229,7 @@ const TeamCompositionComponent = {
         strikers: [...(team.strikers || [])],
         specials: [...(team.specials || [])],
         notes: team.notes || '',
+        mode: team.mode || 'normal',
       };
       this.showForm = true;
     },
@@ -260,7 +272,7 @@ const TeamCompositionComponent = {
       if (idx >= 0) {
         list.splice(idx, 1);
       } else {
-        const limit = this.selectingFor === 'strikers' ? 4 : 2;
+        const limit = this.selectingFor === 'strikers' ? this.maxStriker : this.maxSpecial;
         if (list.length >= limit) {
           this.store.showToast(`${this.selectingFor === 'strikers' ? 'ストライカー' : 'スペシャル'}は最大${limit}名です`, 'error');
           return;

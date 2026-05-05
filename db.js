@@ -231,6 +231,11 @@ const MEMO_CATEGORIES = [
   { value: "misc",           label: "その他" },
 ];
 
+const TEAM_MODES = [
+  { value: 'normal',       label: '通常編成',     striker: 4, special: 2 },
+  { value: 'unrestricted', label: '制約解除決戦', striker: 6, special: 4 },
+];
+
 const TEAM_PURPOSES = [
   { value: "total_assault", label: "総力戦" },
   { value: "joint_assault", label: "大決戦" },

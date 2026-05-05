@@ -361,6 +361,52 @@ body {
   border-color: #f43f5e;
 }
 
+/* ── モード切替トグル ─────────────────────────────────── */
+.mode-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.mode-toggle-btn {
+  width: 100%;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid #c9dcef;
+  border-radius: 2px;
+  background: #ffffff;
+  color: #4a5d75;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.mode-toggle-btn:hover {
+  background: rgba(62,168,255,0.08);
+  color: #128afa;
+  border-color: #3ea8ff;
+}
+
+.mode-toggle-btn.active {
+  background: #128afa;
+  color: #ffffff;
+  border-color: #128afa;
+}
+
+.mode-toggle-hint {
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 10px;
+  color: #4a5d75;
+  margin: 0 0 6px;
+  letter-spacing: 0.02em;
+  padding: 0 2px;
+}
+
 /* モバイルドラワー背景 */
 .sidebar-backdrop {
   display: none;

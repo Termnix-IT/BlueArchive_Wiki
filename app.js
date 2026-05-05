@@ -29,6 +29,17 @@ const store = Vue.reactive({
   memoIsCreating: false,
   memoSearch: '',
 
+  teamMode: 'normal',
+  teamFilter: { purpose: '', name: '' },
+  resetTeamFilter() {
+    this.teamFilter = { purpose: '', name: '' };
+  },
+
+  materialFilter: { type: '', name: '' },
+  resetMaterialFilter() {
+    this.materialFilter = { type: '', name: '' };
+  },
+
   // ── データロード ─────────────────────────────────────────
   async loadStudents() {
     this.students = await getAllStudents();
@@ -125,6 +136,8 @@ const App = {
           <div v-if="!sidebarCollapsed" class="sidebar-body">
             <student-sidebar v-if="store.activeTab === 'students'"></student-sidebar>
             <memo-sidebar v-if="store.activeTab === 'memos'"></memo-sidebar>
+            <team-sidebar v-if="store.activeTab === 'teams'"></team-sidebar>
+            <material-sidebar v-if="store.activeTab === 'materials'"></material-sidebar>
           </div>
         </aside>
 
@@ -235,6 +248,16 @@ const App = {
 // ============================================================
 const app = Vue.createApp(App);
 
+// テンプレートから参照する定数 (db.js の const はテンプレートスコープに無いので明示的に公開)
+app.config.globalProperties.SCHOOLS         = SCHOOLS;
+app.config.globalProperties.ROLES           = ROLES;
+app.config.globalProperties.ATTACK_TYPES    = ATTACK_TYPES;
+app.config.globalProperties.ARMOR_TYPES     = ARMOR_TYPES;
+app.config.globalProperties.MEMO_CATEGORIES = MEMO_CATEGORIES;
+app.config.globalProperties.TEAM_MODES      = TEAM_MODES;
+app.config.globalProperties.TEAM_PURPOSES   = TEAM_PURPOSES;
+app.config.globalProperties.MATERIAL_TYPES  = MATERIAL_TYPES;
+
 // コンポーネント登録
 app.component('student-list',        StudentListComponent);
 app.component('student-sidebar',     StudentSidebarComponent);
@@ -243,6 +266,8 @@ app.component('gacha-simulator',     GachaSimulatorComponent);
 app.component('strategy-memo',       StrategyMemoComponent);
 app.component('memo-sidebar',        MemoSidebarComponent);
 app.component('team-composition',    TeamCompositionComponent);
+app.component('team-sidebar',        TeamSidebarComponent);
 app.component('material-management', MaterialManagementComponent);
+app.component('material-sidebar',    MaterialSidebarComponent);
 
 app.mount('#app');

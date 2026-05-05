@@ -40,16 +40,6 @@ const MaterialManagementComponent = {
         </div>
       </div>
 
-      <!-- フィルターバー -->
-      <div class="filter-bar" style="margin-top:14px">
-        <select v-model="filter.type" style="min-width:140px">
-          <option value="">すべてのカテゴリ</option>
-          <option v-for="t in MATERIAL_TYPES" :key="t.value" :value="t.value">{{ t.label }}</option>
-        </select>
-        <input type="text" v-model="filter.name" placeholder="名前で検索" style="min-width:160px">
-        <span class="filter-count">{{ filteredMaterials.length }} 件</span>
-      </div>
-
       <!-- 素材一覧テーブル -->
       <div style="overflow-x:auto;margin-bottom:24px;margin-top:14px">
         <table class="data-table" style="width:100%">
@@ -140,16 +130,16 @@ const MaterialManagementComponent = {
       showForm: false,
       editingMaterial: null,
       form: this.initForm(),
-      filter: { type: '', name: '' },
       showStudentNeeds: false,
     };
   },
 
   computed: {
     filteredMaterials() {
+      const f = this.store.materialFilter;
       return this.store.materials.filter(m => {
-        if (this.filter.type && m.type !== this.filter.type) return false;
-        if (this.filter.name && !m.name.toLowerCase().includes(this.filter.name.toLowerCase())) return false;
+        if (f.type && m.type !== f.type) return false;
+        if (f.name && !m.name.toLowerCase().includes(f.name.toLowerCase())) return false;
         return true;
       });
     },
