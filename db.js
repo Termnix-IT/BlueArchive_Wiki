@@ -231,6 +231,49 @@ const MEMO_CATEGORIES = [
   { value: "misc",           label: "その他" },
 ];
 
+// ガチャモード定義
+//   rates : 排出枠の内訳。シミュレータは stars 単位で合算した確率で抽選する。
+//           PU 等の枠分け抽選は今後の実装。
+//   tenthGuarantee : 10連目に最低 ★2 保障 (★1 を ★2 に置換)
+const GACHA_MODES = [
+  {
+    value: 'normal',
+    label: '通常募集',
+    description: '恒常排出。10連目は★2以上確定',
+    rates: [
+      { stars: 3, label: '★3',  pct: 0.030 },
+      { stars: 2, label: '★2',  pct: 0.185 },
+      { stars: 1, label: '★1',  pct: 0.785 },
+    ],
+    tenthGuarantee: true,
+  },
+  {
+    value: 'pickup',
+    label: 'ピックアップ募集',
+    description: 'PU生徒UP。10連目は★2以上確定',
+    rates: [
+      { stars: 3, label: 'PU★3',     pct: 0.007 },
+      { stars: 3, label: 'すり抜け★3', pct: 0.023 },
+      { stars: 2, label: '★2',         pct: 0.185 },
+      { stars: 1, label: '★1',         pct: 0.785 },
+    ],
+    tenthGuarantee: true,
+  },
+  {
+    value: 'limited',
+    label: '期間限定募集',
+    description: 'アニバ・ハーフアニバ ★3=6%',
+    rates: [
+      { stars: 3, label: '周年UP★3',   pct: 0.007 },
+      { stars: 3, label: '限定すり抜け', pct: 0.009 },
+      { stars: 3, label: 'その他★3',    pct: 0.044 },
+      { stars: 2, label: '★2',          pct: 0.185 },
+      { stars: 1, label: '★1',          pct: 0.755 },
+    ],
+    tenthGuarantee: true,
+  },
+];
+
 const TEAM_MODES = [
   { value: 'normal',       label: '通常編成',     striker: 4, special: 2 },
   { value: 'unrestricted', label: '制約解除決戦', striker: 6, special: 4 },

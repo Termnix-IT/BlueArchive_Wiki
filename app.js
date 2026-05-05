@@ -40,6 +40,8 @@ const store = Vue.reactive({
     this.materialFilter = { type: '', name: '' };
   },
 
+  gachaMode: 'normal',
+
   // ── データロード ─────────────────────────────────────────
   async loadStudents() {
     this.students = await getAllStudents();
@@ -138,6 +140,7 @@ const App = {
             <memo-sidebar v-if="store.activeTab === 'memos'"></memo-sidebar>
             <team-sidebar v-if="store.activeTab === 'teams'"></team-sidebar>
             <material-sidebar v-if="store.activeTab === 'materials'"></material-sidebar>
+            <gacha-sidebar v-if="store.activeTab === 'gacha'"></gacha-sidebar>
           </div>
         </aside>
 
@@ -257,12 +260,14 @@ app.config.globalProperties.MEMO_CATEGORIES = MEMO_CATEGORIES;
 app.config.globalProperties.TEAM_MODES      = TEAM_MODES;
 app.config.globalProperties.TEAM_PURPOSES   = TEAM_PURPOSES;
 app.config.globalProperties.MATERIAL_TYPES  = MATERIAL_TYPES;
+app.config.globalProperties.GACHA_MODES     = GACHA_MODES;
 
 // コンポーネント登録
 app.component('student-list',        StudentListComponent);
 app.component('student-sidebar',     StudentSidebarComponent);
 app.component('student-detail',      StudentDetailComponent);
 app.component('gacha-simulator',     GachaSimulatorComponent);
+app.component('gacha-sidebar',       GachaSidebarComponent);
 app.component('strategy-memo',       StrategyMemoComponent);
 app.component('memo-sidebar',        MemoSidebarComponent);
 app.component('team-composition',    TeamCompositionComponent);

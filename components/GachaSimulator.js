@@ -2,20 +2,14 @@
 //  components/GachaSimulator.js  —  ガチャシミュレーター
 // ============================================================
 //
-//  通常募集 (恒常ガチャ) の排出率:
-//    ★3 = 3.0%
-//    ★2 = 18.5%
-//    ★1 = 78.5%
+//  募集モード (db.js の GACHA_MODES):
+//    normal  : ★3 3.0%  / ★2 18.5%
+//    pickup  : ★3 3.0%  / ★2 18.5%  (ピックアップ枠は今後実装)
+//    limited : ★3 6.0%  / ★2 18.5%  (アニバ・ハーフアニバ)
 //
 //  生徒マスターからレアリティ別にランダム抽選。
 //  ★1の生徒マスターが無い場合は "???" 表示。
 // ============================================================
-
-const GACHA_RATES = {
-  three: 0.03,
-  two:   0.185,
-  // one  = 1 - (three + two) = 0.785
-};
 
 const PULL_COST = 120;       // 1連あたりの青輝石
 const PITY_CEILING = 200;    // 天井 (参考表示用)
@@ -29,13 +23,13 @@ const GachaSimulatorComponent = {
       <!-- ── ヘッダー ── -->
       <div class="sim-header">
         <div>
-          <h2 class="sim-title">通常募集シミュレーター</h2>
-          <div class="sim-subtitle">恒常ガチャの排出率で抽選します</div>
+          <h2 class="sim-title">{{ currentMode.label }} シミュレーター</h2>
+          <div class="sim-subtitle">{{ currentMode.description }}</div>
         </div>
         <div class="sim-prob-display">
-          <span class="sim-prob sim-prob-3">★★★ 3.0%</span>
-          <span class="sim-prob sim-prob-2">★★ 18.5%</span>
-          <span class="sim-prob sim-prob-1">★ 78.5%</span>
+          <span class="sim-prob sim-prob-3">★★★ {{ ratePct.three }}%</span>
+          <span class="sim-prob sim-prob-2">★★ {{ ratePct.two }}%</span>
+          <span class="sim-prob sim-prob-1">★ {{ ratePct.one }}%</span>
         </div>
       </div>
 
@@ -153,6 +147,21 @@ const GachaSimulatorComponent = {
   },
 
   computed: {
+    currentMode() {
+      return GACHA_MODES.find(m => m.value === this.store.gachaMode) || GACHA_MODES[0];
+    },
+    rates() {
+      const sumStars = (s) =>
+        this.currentMode.rates.filter(r => r.stars === s).reduce((acc, r) => acc + r.pct, 0);
+      return { three: sumStars(3), two: sumStars(2), one: sumStars(1) };
+    },
+    ratePct() {
+      return {
+        three: (this.rates.three * 100).toFixed(1),
+        two:   (this.rates.two   * 100).toFixed(1),
+        one:   (this.rates.one   * 100).toFixed(1),
+      };
+    },
     threeStarRate() {
       if (this.stats.total === 0) return '0.00';
       return (this.stats.threeStars / this.stats.total * 100).toFixed(2);
@@ -170,12 +179,18 @@ const GachaSimulatorComponent = {
 
   methods: {
     // 1回分の抽選 (内部関数)
-    rollOne() {
+    //   forceMinTwoStar: ★1 を抽選候補から外し、★2 に振り替える (10連目保障用)
+    rollOne(forceMinTwoStar = false) {
       const r = Math.random();
+      const rates = this.rates;
       let rarity;
-      if (r < GACHA_RATES.three) rarity = 3;
-      else if (r < GACHA_RATES.three + GACHA_RATES.two) rarity = 2;
-      else rarity = 1;
+      if (forceMinTwoStar) {
+        rarity = (r < rates.three) ? 3 : 2;
+      } else {
+        if (r < rates.three) rarity = 3;
+        else if (r < rates.three + rates.two) rarity = 2;
+        else rarity = 1;
+      }
 
       // ピティ (連続非★3カウント) 更新
       if (rarity === 3) {
@@ -222,10 +237,13 @@ const GachaSimulatorComponent = {
       if (this.isRolling) return;
       this.isRolling = true;
       const results = [];
+      const guaranteeOnLast = !!this.currentMode.tenthGuarantee;
       for (let i = 0; i < 10; i++) {
-        results.push(this.rollOne());
+        // 10連目で ★2/★3 がまだ出ていない場合に最低保障を適用
+        const hasNonOne = results.some(p => p.rarity >= 2);
+        const forceMin  = guaranteeOnLast && i === 9 && !hasNonOne;
+        results.push(this.rollOne(forceMin));
       }
-      // ★3を後ろに寄せて演出感を出す (ソートはせず元順序維持)
       this.latestPulls = results;
       this.$nextTick(() => { this.isRolling = false; });
     },
