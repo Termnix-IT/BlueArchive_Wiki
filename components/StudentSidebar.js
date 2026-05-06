@@ -7,9 +7,15 @@ const StudentSidebarComponent = {
   inject: ['store'],
   template: `
     <div class="sidebar-content">
-      <button class="sidebar-add-btn" @click="store.openStudentDetail(null)">
-        ＋ 新規追加
-      </button>
+      <div class="sidebar-section-id">// VIEW</div>
+      <div class="mode-toggle">
+        <button class="mode-toggle-btn"
+          :class="{ active: store.studentView === 'grid' }"
+          @click="store.studentView = 'grid'">一覧</button>
+        <button class="mode-toggle-btn"
+          :class="{ active: store.studentView === 'checker' }"
+          @click="store.studentView = 'checker'">所持チェッカー</button>
+      </div>
 
       <div class="sidebar-section-id">// FILTER</div>
 
@@ -22,7 +28,7 @@ const StudentSidebarComponent = {
         <label>学校</label>
         <select v-model="store.studentFilters.school">
           <option value="">全学校</option>
-          <option v-for="s in SCHOOLS" :key="s" :value="s">{{ s }}</option>
+          <option v-for="s in availableSchools" :key="s" :value="s">{{ s }}</option>
         </select>
       </div>
 
@@ -70,7 +76,7 @@ const StudentSidebarComponent = {
           <option value="school">学校順</option>
           <option value="rarity">レア順</option>
           <option value="bondLevel">絆Lv順</option>
-          <option value="starRank">絆星順</option>
+          <option value="starRank">神秘開放順</option>
           <option value="owned">所持順</option>
         </select>
       </div>
@@ -80,4 +86,17 @@ const StudentSidebarComponent = {
       </button>
     </div>
   `,
+
+  computed: {
+    // 学校選択肢: マスタに実在する学校のみ。SCHOOLS 順を優先、未掲載は末尾アルファベット順
+    availableSchools() {
+      const fromData = new Set();
+      for (const s of this.store.students) {
+        if (s.school) fromData.add(s.school);
+      }
+      const ordered = SCHOOLS.filter(s => fromData.has(s));
+      const extras  = [...fromData].filter(s => !SCHOOLS.includes(s)).sort();
+      return [...ordered, ...extras];
+    },
+  },
 };

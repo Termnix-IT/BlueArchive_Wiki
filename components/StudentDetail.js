@@ -9,7 +9,7 @@ const StudentDetailComponent = {
       <div class="modal-box">
         <div class="scan-line"></div>
         <div class="modal-header">
-          <h2>{{ isNew ? '生徒を新規登録' : '生徒情報 #' + (store.selectedStudentId || '?') }}</h2>
+          <h2>{{ form.name || '生徒情報' }}</h2>
           <button class="modal-close" @click="store.closeStudentDetail()">×</button>
         </div>
 
@@ -31,51 +31,33 @@ const StudentDetailComponent = {
               @click="form.imageData = ''">画像を削除</button>
           </div>
 
-          <!-- 基本情報 -->
+          <!-- 基本情報 (マスタデータ・読み取り専用) -->
           <div class="form-group">
-            <label>名前 *</label>
-            <input type="text" v-model="form.name" placeholder="例: ホシノ">
-          </div>
-          <div class="form-group">
-            <label>学校 *</label>
-            <select v-model="form.school">
-              <option value="">選択してください</option>
-              <option v-for="s in SCHOOLS" :key="s" :value="s">{{ s }}</option>
-            </select>
+            <label>学校</label>
+            <div class="form-readonly">{{ form.school || '—' }}</div>
           </div>
           <div class="form-group">
             <label>ロール</label>
-            <select v-model="form.role">
-              <option v-for="r in ROLES" :key="r" :value="r">{{ r }}</option>
-            </select>
+            <div class="form-readonly">{{ form.role || '—' }}</div>
           </div>
           <div class="form-group">
             <label>レアリティ</label>
-            <select v-model.number="form.rarity">
-              <option :value="3">★★★ (3星)</option>
-              <option :value="2">★★ (2星)</option>
-              <option :value="1">★ (1星)</option>
-            </select>
+            <div class="form-readonly">{{ '★'.repeat(form.rarity || 1) }}</div>
           </div>
           <div class="form-group">
             <label>攻撃タイプ</label>
-            <select v-model="form.attackType">
-              <option v-for="t in ATTACK_TYPES" :key="t.value" :value="t.value">{{ t.label }}</option>
-            </select>
+            <div class="form-readonly">{{ attackTypeLabel(form.attackType) }}</div>
           </div>
           <div class="form-group">
             <label>装甲タイプ</label>
-            <select v-model="form.armorType">
-              <option v-for="t in ARMOR_TYPES" :key="t.value" :value="t.value">{{ t.label }}</option>
-            </select>
+            <div class="form-readonly">{{ armorTypeLabel(form.armorType) }}</div>
           </div>
           <div class="form-group">
             <label>位置</label>
-            <select v-model="form.position">
-              <option value="striker">ストライカー</option>
-              <option value="special">スペシャル</option>
-            </select>
+            <div class="form-readonly">{{ form.position === 'striker' ? 'ストライカー' : 'スペシャル' }}</div>
           </div>
+
+          <!-- 所持 (育成データ・編集可) -->
           <div class="form-group">
             <label>所持</label>
             <select v-model="form.owned">
@@ -86,8 +68,8 @@ const StudentDetailComponent = {
 
           <!-- 育成情報 -->
           <div class="form-group">
-            <label>星ランク (絆星)</label>
-            <input type="number" v-model.number="form.starRank" min="1" max="8">
+            <label>神秘開放レベル</label>
+            <input type="number" v-model.number="form.starRank" min="1" max="5">
           </div>
           <div class="form-group">
             <label>絆レベル</label>
@@ -95,12 +77,7 @@ const StudentDetailComponent = {
           </div>
           <div class="form-group">
             <label>固有武器レベル</label>
-            <select v-model.number="form.uniqueWeaponLevel">
-              <option :value="0">未解放</option>
-              <option :value="1">Lv.1</option>
-              <option :value="2">Lv.2</option>
-              <option :value="3">Lv.3 (MAX)</option>
-            </select>
+            <input type="number" v-model.number="form.uniqueWeaponLevel" min="0" max="60">
           </div>
 
           <!-- スキルレベル -->
@@ -145,6 +122,25 @@ const StudentDetailComponent = {
             </div>
           </div>
 
+          <!-- 能力開放レベル -->
+          <div class="form-group full-width">
+            <label>能力開放レベル</label>
+            <div class="equip-grid">
+              <div class="form-group">
+                <label>最大HPボーナス</label>
+                <input type="number" v-model.number="form.releaseBonus.hp" min="0" max="25">
+              </div>
+              <div class="form-group">
+                <label>攻撃力ボーナス</label>
+                <input type="number" v-model.number="form.releaseBonus.attack" min="0" max="25">
+              </div>
+              <div class="form-group">
+                <label>治癒力ボーナス</label>
+                <input type="number" v-model.number="form.releaseBonus.heal" min="0" max="25">
+              </div>
+            </div>
+          </div>
+
           <!-- メモ -->
           <div class="form-group full-width">
             <label>個人メモ</label>
@@ -177,7 +173,7 @@ const StudentDetailComponent = {
         </div>
 
         <div class="modal-footer">
-          <button v-if="!isNew" class="btn-edit btn-danger" @click="confirmDelete">削除</button>
+          <button class="btn-edit btn-danger" @click="confirmReset" title="育成データを初期値に戻します(マスタ生徒は残ります)">育成リセット</button>
           <span style="flex:1"></span>
           <button class="btn-secondary-modal" @click="store.closeStudentDetail()">キャンセル</button>
           <button class="btn-primary" @click="save">保存</button>
@@ -194,12 +190,6 @@ const StudentDetailComponent = {
     };
   },
 
-  computed: {
-    isNew() {
-      return !this.store.selectedStudentId;
-    },
-  },
-
   watch: {
     'store.selectedStudentId': {
       immediate: true,
@@ -211,6 +201,7 @@ const StudentDetailComponent = {
               ...s,
               skillLevels: { ...{ ex:1, normal:1, passive:1, sub:1 }, ...(s.skillLevels || {}) },
               equipmentLevels: [...(s.equipmentLevels || [1,1,1])],
+              releaseBonus: { hp: 0, attack: 0, heal: 0, ...(s.releaseBonus || {}) },
               neededMaterials: s.neededMaterials ? s.neededMaterials.map(n => ({ ...n })) : [],
               imageData: s.imageData || '',
             };
@@ -238,10 +229,10 @@ const StudentDetailComponent = {
         uniqueWeaponLevel: 0,
         skillLevels: { ex: 1, normal: 1, passive: 1, sub: 1 },
         equipmentLevels: [1, 1, 1],
+        releaseBonus: { hp: 0, attack: 0, heal: 0 },
         notes: '',
         neededMaterials: [],
         imageData: '',
-        addedAt: new Date().toISOString().split('T')[0],
       };
     },
 
@@ -304,36 +295,46 @@ const StudentDetailComponent = {
       this.form.neededMaterials.splice(idx, 1);
     },
 
+    attackTypeLabel(value) {
+      const t = ATTACK_TYPES.find(t => t.value === value);
+      return t ? t.label : (value || '—');
+    },
+
+    armorTypeLabel(value) {
+      const t = ARMOR_TYPES.find(t => t.value === value);
+      return t ? t.label : (value || '—');
+    },
+
     async save() {
-      if (!this.form.name.trim()) {
-        this.store.showToast('名前を入力してください', 'error');
-        return;
-      }
-      if (!this.form.school) {
-        this.store.showToast('学校を選択してください', 'error');
+      if (!this.store.selectedStudentId) {
+        this.store.showToast('対象生徒が選択されていません', 'error');
         return;
       }
       const data = {
-        ...this.form,
-        skillLevels:     { ...this.form.skillLevels },
-        equipmentLevels: [...this.form.equipmentLevels],
-        neededMaterials: (this.form.neededMaterials || []).map(n => ({ ...n })),
+        id: this.store.selectedStudentId,
+        owned:             this.form.owned,
+        starRank:          this.form.starRank,
+        bondLevel:         this.form.bondLevel,
+        uniqueWeaponLevel: this.form.uniqueWeaponLevel,
+        skillLevels:       { ...this.form.skillLevels },
+        equipmentLevels:   [...this.form.equipmentLevels],
+        releaseBonus:      { ...this.form.releaseBonus },
+        notes:             this.form.notes,
+        neededMaterials:   (this.form.neededMaterials || []).map(n => ({ ...n })),
+        imageData:         this.form.imageData || '',
       };
-      if (this.store.selectedStudentId) {
-        data.id = this.store.selectedStudentId;
-      }
       await saveStudent(data);
       await this.store.loadStudents();
       this.store.closeStudentDetail();
       this.store.showToast('保存しました', 'success');
     },
 
-    async confirmDelete() {
-      if (!confirm(`「${this.form.name}」を削除しますか？`)) return;
+    async confirmReset() {
+      if (!confirm(`「${this.form.name}」の育成データを初期値にリセットしますか？\n(マスタ生徒は残ります)`)) return;
       await deleteStudent(this.store.selectedStudentId);
       await this.store.loadStudents();
       this.store.closeStudentDetail();
-      this.store.showToast('削除しました', 'info');
+      this.store.showToast('育成データをリセットしました', 'info');
     },
   },
 };

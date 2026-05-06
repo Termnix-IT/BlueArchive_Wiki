@@ -20,104 +20,290 @@ db.version(2).stores({
   materials:'++id, name, type, updatedAt',
 });
 
-// ============================================================
-//  生徒マスターデータ（ゲーム固定値）
-// ============================================================
-const STUDENT_MASTER = [
-  // ── アビドス ──
-  { name: "ホシノ",   school: "アビドス",       role: "Defender",   rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "シロコ",   school: "アビドス",       role: "Attacker",   rarity: 3, attackType: "piercing",  armorType: "light",   position: "striker" },
-  { name: "セリカ",   school: "アビドス",       role: "Attacker",   rarity: 2, attackType: "explosive", armorType: "light",   position: "striker" },
-  { name: "ノノミ",   school: "アビドス",       role: "Supporter",  rarity: 2, attackType: "piercing",  armorType: "light",   position: "special" },
-  { name: "アヤネ",   school: "アビドス",       role: "Healer",     rarity: 2, attackType: "mystic",    armorType: "light",   position: "special" },
-  // ── トリニティ ──
-  { name: "ハスミ",   school: "トリニティ",     role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "light",   position: "striker" },
-  { name: "ヒフミ",   school: "トリニティ",     role: "Supporter",  rarity: 3, attackType: "piercing",  armorType: "light",   position: "special" },
-  { name: "コハル",   school: "トリニティ",     role: "Healer",     rarity: 3, attackType: "mystic",    armorType: "heavy",   position: "special" },
-  { name: "ハナコ",   school: "トリニティ",     role: "Supporter",  rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  { name: "アコ",     school: "トリニティ",     role: "Supporter",  rarity: 3, attackType: "mystic",    armorType: "light",   position: "special" },
-  { name: "ユウカ",   school: "トリニティ",     role: "Defender",   rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "ツルギ",   school: "トリニティ",     role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "ノドカ",   school: "トリニティ",     role: "Supporter",  rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  { name: "アズサ",   school: "トリニティ",     role: "Attacker",   rarity: 3, attackType: "piercing",  armorType: "light",   position: "striker" },
-  { name: "セイア",   school: "トリニティ",     role: "Supporter",  rarity: 3, attackType: "mystic",    armorType: "light",   position: "special" },
-  // ── ゲヘナ ──
-  { name: "ムツキ",   school: "ゲヘナ",         role: "T.S.",       rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  { name: "ハルナ",   school: "ゲヘナ",         role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "special", position: "striker" },
-  { name: "カヨコ",   school: "ゲヘナ",         role: "T.S.",       rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  { name: "マコト",   school: "ゲヘナ",         role: "Defender",   rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "カリン",   school: "ゲヘナ",         role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "light",   position: "striker" },
-  { name: "ヒナ",     school: "ゲヘナ",         role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "light",   position: "striker" },
-  { name: "イロハ",   school: "ゲヘナ",         role: "Attacker",   rarity: 3, attackType: "piercing",  armorType: "light",   position: "striker" },
-  { name: "ジュンコ", school: "ゲヘナ",         role: "Supporter",  rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  // ── ミレニアム ──
-  { name: "アリス",   school: "ミレニアム",     role: "Attacker",   rarity: 3, attackType: "mystic",    armorType: "light",   position: "striker" },
-  { name: "ネル",     school: "ミレニアム",     role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "ヒビキ",   school: "ミレニアム",     role: "Supporter",  rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  { name: "チェリノ", school: "ミレニアム",     role: "Defender",   rarity: 2, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "イズナ",   school: "ミレニアム",     role: "Attacker",   rarity: 3, attackType: "piercing",  armorType: "light",   position: "striker" },
-  { name: "カガリ",   school: "ミレニアム",     role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  // ── アリウス ──
-  { name: "スズミ",   school: "アリウス",       role: "Healer",     rarity: 3, attackType: "mystic",    armorType: "light",   position: "special" },
-  { name: "アスナ",   school: "アリウス",       role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "light",   position: "striker" },
-  { name: "シュン",   school: "アリウス",       role: "Attacker",   rarity: 3, attackType: "mystic",    armorType: "light",   position: "striker" },
-  // ── レッドウィンター ──
-  { name: "マキ",     school: "レッドウィンター", role: "Healer",   rarity: 3, attackType: "mystic",    armorType: "light",   position: "special" },
-  { name: "ミチル",   school: "レッドウィンター", role: "Supporter", rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  { name: "ウタハ",   school: "レッドウィンター", role: "Attacker",  rarity: 3, attackType: "mystic",    armorType: "light",   position: "striker" },
-  // ── 百鬼夜行 ──
-  { name: "ヒヨリ",   school: "百鬼夜行",       role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "light",   position: "striker" },
-  { name: "アカネ",   school: "百鬼夜行",       role: "T.S.",       rarity: 3, attackType: "mystic",    armorType: "light",   position: "special" },
-  // ── ヴァルキューレ ──
-  { name: "レイサ",   school: "ヴァルキューレ",  role: "Defender",  rarity: 3, attackType: "explosive", armorType: "heavy",   position: "striker" },
-  { name: "ナギサ",   school: "ヴァルキューレ",  role: "Supporter", rarity: 3, attackType: "explosive", armorType: "light",   position: "special" },
-  // ── SRT ──
-  { name: "サオリ",   school: "SRT特務班",      role: "Attacker",   rarity: 3, attackType: "explosive", armorType: "light",   position: "striker" },
-  // ── その他 ──
-  { name: "アロナ",   school: "シャーレ",        role: "Supporter", rarity: 3, attackType: "mystic",    armorType: "light",   position: "special" },
-];
+// v3: 生徒画像専用テーブルを追加 (Base64 dataURL を localStorage 容量制限から逃すため)
+//     旧 students テーブルは当面残す (マイグレーション完了確認後に次メジャーで削除)
+db.version(3).stores({
+  students: '++id, name, school, role, rarity, attackType, armorType, position, owned',
+  gacha:    '++id, date, banner, studentName, rarity, cost',
+  memos:    '++id, category, title, updatedAt',
+  events:   '++id, eventName, type, startDate, cleared',
+  teams:    '++id, name, purpose, updatedAt',
+  materials:'++id, name, type, updatedAt',
+  studentImages: 'studentId',
+});
 
-// 初回起動時に生徒マスターデータをDBに投入
-async function seedStudentsIfEmpty() {
-  const count = await db.students.count();
-  if (count === 0) {
-    const now = new Date().toISOString().split('T')[0];
-    const records = STUDENT_MASTER.map(s => ({
-      ...s,
-      owned: false,
-      starRank: 1,
-      bondLevel: 1,
-      uniqueWeaponLevel: 0,
-      skillLevels: { ex: 1, normal: 1, passive: 1, sub: 1 },
-      equipmentLevels: [1, 1, 1],
-      notes: '',
-      addedAt: now,
-    }));
-    await db.students.bulkAdd(records);
+// ============================================================
+//  生徒マスターデータ
+//  → data/students.master.csv (編集ソース) → scripts/build-students.py → data/students.master.json (本番)
+//  loadStudentMaster() で fetch する。コード内ハードコードは廃止。
+// ============================================================
+
+// ============================================================
+//  生徒データ管理 (3層分離)
+//  1. マスタ:    data/students.master.json (HTTP fetch, read-only)
+//  2. 育成データ: localStorage['BlueArchive.userStudents']
+//  3. 画像:      IndexedDB.studentImages
+// ============================================================
+
+const STUDENT_MASTER_URL  = 'data/students.master.json';
+const LS_USER_STUDENTS    = 'BlueArchive.userStudents';
+const LS_UNMATCHED        = 'BlueArchive.unmatchedStudents';
+const LS_MIGRATION_FLAG   = 'BlueArchive.studentMigratedV2';
+
+let _studentMasterCache = null;
+
+// ── マスタ ─────────────────────────────────────────────
+async function loadStudentMaster(force = false) {
+  if (_studentMasterCache && !force) return _studentMasterCache;
+  const res = await fetch(STUDENT_MASTER_URL);
+  if (!res.ok) throw new Error(`生徒マスタ取得失敗: ${res.status}`);
+  _studentMasterCache = await res.json();
+  return _studentMasterCache;
+}
+
+// ── 育成データ (localStorage) ──────────────────────────
+function defaultUserStudent() {
+  return {
+    owned: false,
+    starRank: 1,                                              // 神秘開放レベル (1〜5)
+    bondLevel: 1,
+    uniqueWeaponLevel: 0,                                     // 固有武器レベル (0〜60、0は未解放)
+    skillLevels: { ex: 1, normal: 1, passive: 1, sub: 1 },
+    equipmentLevels: [1, 1, 1],
+    releaseBonus: { hp: 0, attack: 0, heal: 0 },              // 能力開放レベル (各 0〜25)
+    notes: '',
+    neededMaterials: [],
+  };
+}
+
+function getUserStudents() {
+  try {
+    const raw = localStorage.getItem(LS_USER_STUDENTS);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    console.error('育成データ読込失敗', e);
+    return {};
   }
 }
 
+function getUserStudent(id) {
+  return getUserStudents()[id] || null;
+}
+
+function saveUserStudent(id, partial) {
+  const map = getUserStudents();
+  const current = map[id] || defaultUserStudent();
+  map[id] = {
+    ...current,
+    ...partial,
+    skillLevels:     { ...current.skillLevels,     ...(partial.skillLevels     || {}) },
+    equipmentLevels: partial.equipmentLevels ? [...partial.equipmentLevels] : [...current.equipmentLevels],
+    releaseBonus:    { ...defaultUserStudent().releaseBonus, ...current.releaseBonus, ...(partial.releaseBonus || {}) },
+    neededMaterials: partial.neededMaterials ? partial.neededMaterials.map(n => ({ ...n })) : [...current.neededMaterials],
+  };
+  localStorage.setItem(LS_USER_STUDENTS, JSON.stringify(map));
+}
+
+function deleteUserStudent(id) {
+  const map = getUserStudents();
+  delete map[id];
+  localStorage.setItem(LS_USER_STUDENTS, JSON.stringify(map));
+}
+
+// ── 画像 (IndexedDB.studentImages) ─────────────────────
+async function getStudentImage(id) {
+  const rec = await db.studentImages.get(id);
+  return rec ? rec.imageData : null;
+}
+
+async function saveStudentImage(id, dataUrl) {
+  await db.studentImages.put({
+    studentId: id,
+    imageData: dataUrl,
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+async function deleteStudentImage(id) {
+  await db.studentImages.delete(id);
+}
+
+async function loadAllStudentImages() {
+  const arr = await db.studentImages.toArray();
+  const map = {};
+  for (const r of arr) map[r.studentId] = r.imageData;
+  return map;
+}
+
+// ── 結合ビュー ─────────────────────────────────────────
+async function getAllStudentsMerged() {
+  const master  = await loadStudentMaster();
+  const userMap = getUserStudents();
+  const images  = await loadAllStudentImages();
+
+  return master.map(m => {
+    const user = userMap[m.id] || defaultUserStudent();
+    return {
+      // マスタ項目
+      id:         m.id,
+      name:       m.name,
+      school:     m.school,
+      role:       m.role,
+      rarity:     m.rarity,
+      attackType: m.attackType,
+      armorType:  m.armorType,
+      position:   m.position,
+      // 育成データ (defaults を上書き)
+      owned:             user.owned,
+      starRank:          user.starRank,
+      bondLevel:         user.bondLevel,
+      uniqueWeaponLevel: user.uniqueWeaponLevel,
+      skillLevels:       { ...defaultUserStudent().skillLevels, ...(user.skillLevels || {}) },
+      equipmentLevels:   user.equipmentLevels && user.equipmentLevels.length ? user.equipmentLevels : [1, 1, 1],
+      releaseBonus:      { ...defaultUserStudent().releaseBonus, ...(user.releaseBonus || {}) },
+      notes:             user.notes || '',
+      neededMaterials:   user.neededMaterials || [],
+      // 画像 (アップロード分のみ。未指定はマスタの imageUrl にフォールバック)
+      imageData:         images[m.id] || null,
+      imageUrl:          m.imageUrl || '',
+    };
+  });
+}
+
+// ── マイグレーション (旧 IndexedDB → 新構造) ─────────────
+async function migrateStudentsV1ToV2() {
+  if (localStorage.getItem(LS_MIGRATION_FLAG)) return { migrated: 0, unmatched: 0 };
+
+  const old = await db.students.toArray();
+  if (old.length === 0) {
+    localStorage.setItem(LS_MIGRATION_FLAG, '1');
+    return { migrated: 0, unmatched: 0 };
+  }
+
+  const master = await loadStudentMaster();
+  const userMap = {};
+  const unmatched = [];
+  const idMap = {};  // 旧数値ID → 新スラグID (チーム参照の置換用)
+
+  for (const s of old) {
+    // 第一: 名前+学校 / 第二: 名前のみ
+    let matched = master.find(m => m.name === s.name && m.school === s.school);
+    if (!matched) matched = master.find(m => m.name === s.name);
+
+    if (matched) {
+      idMap[s.id] = matched.id;
+      userMap[matched.id] = {
+        owned:             !!s.owned,
+        starRank:          s.starRank          || 1,
+        bondLevel:         s.bondLevel         || 1,
+        uniqueWeaponLevel: s.uniqueWeaponLevel || 0,
+        skillLevels:       s.skillLevels       || defaultUserStudent().skillLevels,
+        equipmentLevels:   s.equipmentLevels   || [1, 1, 1],
+        notes:             s.notes             || '',
+        neededMaterials:   s.neededMaterials   || [],
+      };
+      if (s.imageData) {
+        try { await saveStudentImage(matched.id, s.imageData); } catch (e) { console.warn('画像移行失敗', s.name, e); }
+      }
+    } else {
+      unmatched.push({
+        name: s.name, school: s.school, role: s.role, rarity: s.rarity,
+        attackType: s.attackType, armorType: s.armorType, position: s.position,
+        owned: s.owned, bondLevel: s.bondLevel, starRank: s.starRank,
+      });
+    }
+  }
+
+  // チーム参照の数値ID→スラグID 置換
+  await migrateTeamReferences(idMap);
+
+  localStorage.setItem(LS_USER_STUDENTS, JSON.stringify(userMap));
+  if (unmatched.length > 0) {
+    localStorage.setItem(LS_UNMATCHED, JSON.stringify(unmatched));
+  }
+  localStorage.setItem(LS_MIGRATION_FLAG, '1');
+
+  return { migrated: Object.keys(userMap).length, unmatched: unmatched.length };
+}
+
+// チームの strikers/specials が参照する旧数値ID を新スラグID に置換
+async function migrateTeamReferences(idMap) {
+  const teams = await db.teams.toArray();
+  for (const team of teams) {
+    const remap = (arr) => (arr || []).map(id => idMap[id]).filter(Boolean);
+    const newSt = remap(team.strikers);
+    const newSp = remap(team.specials);
+    const changed = JSON.stringify(newSt) !== JSON.stringify(team.strikers || []) ||
+                    JSON.stringify(newSp) !== JSON.stringify(team.specials || []);
+    if (changed) {
+      team.strikers = newSt;
+      team.specials = newSp;
+      await db.teams.put(team);
+    }
+  }
+}
+
+// ── アプリ起動時の初期化 ───────────────────────────────
+//   マスタを取得しつつ旧データのマイグレーションを実施
+async function initStudentData() {
+  await loadStudentMaster();
+  const result = await migrateStudentsV1ToV2();
+  if (result.unmatched > 0) {
+    console.warn(`${result.unmatched} 件の生徒がマスタにマッチせず未移行です (localStorage の ${LS_UNMATCHED} に保存)`);
+  }
+  return result;
+}
+
+// 後方互換: 既存呼び出しを置き換える
+async function seedStudentsIfEmpty() {
+  return initStudentData();
+}
+
 // ============================================================
-//  生徒 CRUD
+//  生徒 CRUD (新 API へのファサード)
+//   - 旧コードからの呼び出しを壊さないよう、関数名を維持
 // ============================================================
 async function getAllStudents() {
-  return db.students.toArray();
+  return getAllStudentsMerged();
 }
 
 async function saveStudent(student) {
-  if (student.id) {
-    await db.students.put(student);
-  } else {
-    await db.students.add(student);
+  if (!student.id) {
+    // 新規追加は今後サポートしない (生徒追加はマスタCSV経由のみ)
+    console.warn('saveStudent: id 無しでの追加は非サポートです');
+    return;
+  }
+  // 育成データのみを抽出して保存 (マスタ項目は無視)
+  const userPart = {
+    owned:             student.owned,
+    starRank:          student.starRank,
+    bondLevel:         student.bondLevel,
+    uniqueWeaponLevel: student.uniqueWeaponLevel,
+    skillLevels:       student.skillLevels,
+    equipmentLevels:   student.equipmentLevels,
+    notes:             student.notes,
+    neededMaterials:   student.neededMaterials,
+  };
+  saveUserStudent(student.id, userPart);
+
+  // 画像が来ていれば別保存
+  if (student.imageData !== undefined) {
+    if (student.imageData) {
+      await saveStudentImage(student.id, student.imageData);
+    } else {
+      await deleteStudentImage(student.id);
+    }
   }
 }
 
 async function deleteStudent(id) {
-  await db.students.delete(id);
+  // マスタ生徒は削除しない。育成データと画像をクリアする
+  deleteUserStudent(id);
+  await deleteStudentImage(id);
 }
 
 async function toggleOwned(id, current) {
-  await db.students.update(id, { owned: !current });
+  saveUserStudent(id, { owned: !current });
 }
 
 // ============================================================
@@ -201,6 +387,12 @@ async function deleteMaterial(id) {
 // ============================================================
 //  定数 (ドロップダウン等で使用)
 // ============================================================
+// SCHOOLS: 表示順マスタ。フィルタ ドロップダウン / グルーピング順で参照。
+//   実際の学校はマスタ JSON 由来で動的に検出されるため、ここは「順序のヒント」。
+//   SCHOOLS にない学校が CSV に追加されてもアプリは動作する (末尾に並ぶ)。
+//   新しい正規学校を追加する場合は、(1) CSV に行追加 + ビルド、
+//   (2) 必要なら SCHOOLS にも追記 (表示順を制御したい場合)、
+//   (3) 必要なら StudentList.js の SCHOOL_COLORS にも色を追加。
 const SCHOOLS = [
   "アビドス", "トリニティ", "ゲヘナ", "ミレニアム",
   "アリウス", "ヴァルキューレ", "レッドウィンター",
@@ -232,18 +424,24 @@ const MEMO_CATEGORIES = [
 ];
 
 // ガチャモード定義
-//   rates : 排出枠の内訳。シミュレータは stars 単位で合算した確率で抽選する。
-//           PU 等の枠分け抽選は今後の実装。
-//   tenthGuarantee : 10連目に最低 ★2 保障 (★1 を ★2 に置換)
+//   rates[].pool : 抽選プール識別子。シミュレータが該当生徒を絞り込むのに使う。
+//     'all'                    — 同レアリティ全員
+//     'pickup'                 — store.gachaPickupIds に含まれる ★3
+//     'pickup_fallthrough'     — store.gachaPickupIds に含まれない ★3
+//     'limited_up'             — store.gachaLimitedUpIds に含まれる ★3 (未配置)
+//     'limited_fallthrough'    — store.gachaLimitedFallthroughIds に含まれる ★3 (未配置)
+//     'other_three'            — limited_up/fallthrough のどれにも含まれない ★3
+//   候補が空の場合は同レアリティ全員にフォールバック (シミュレータ側)
+//   tenthGuarantee : 10連目は ★1 を排除し ★2 に振り替え
 const GACHA_MODES = [
   {
     value: 'normal',
     label: '通常募集',
     description: '恒常排出。10連目は★2以上確定',
     rates: [
-      { stars: 3, label: '★3',  pct: 0.030 },
-      { stars: 2, label: '★2',  pct: 0.185 },
-      { stars: 1, label: '★1',  pct: 0.785 },
+      { stars: 3, label: '★3',  pct: 0.030, pool: 'all' },
+      { stars: 2, label: '★2',  pct: 0.185, pool: 'all' },
+      { stars: 1, label: '★1',  pct: 0.785, pool: 'all' },
     ],
     tenthGuarantee: true,
   },
@@ -252,10 +450,10 @@ const GACHA_MODES = [
     label: 'ピックアップ募集',
     description: 'PU生徒UP。10連目は★2以上確定',
     rates: [
-      { stars: 3, label: 'PU★3',     pct: 0.007 },
-      { stars: 3, label: 'すり抜け★3', pct: 0.023 },
-      { stars: 2, label: '★2',         pct: 0.185 },
-      { stars: 1, label: '★1',         pct: 0.785 },
+      { stars: 3, label: 'PU★3',       pct: 0.007, pool: 'pickup' },
+      { stars: 3, label: 'すり抜け★3', pct: 0.023, pool: 'pickup_fallthrough' },
+      { stars: 2, label: '★2',          pct: 0.185, pool: 'all' },
+      { stars: 1, label: '★1',          pct: 0.785, pool: 'all' },
     ],
     tenthGuarantee: true,
   },
@@ -264,11 +462,11 @@ const GACHA_MODES = [
     label: '期間限定募集',
     description: 'アニバ・ハーフアニバ ★3=6%',
     rates: [
-      { stars: 3, label: '周年UP★3',   pct: 0.007 },
-      { stars: 3, label: '限定すり抜け', pct: 0.009 },
-      { stars: 3, label: 'その他★3',    pct: 0.044 },
-      { stars: 2, label: '★2',          pct: 0.185 },
-      { stars: 1, label: '★1',          pct: 0.755 },
+      { stars: 3, label: '周年UP★3',    pct: 0.007, pool: 'limited_up' },
+      { stars: 3, label: '限定すり抜け', pct: 0.009, pool: 'limited_fallthrough' },
+      { stars: 3, label: 'その他★3',    pct: 0.044, pool: 'other_three' },
+      { stars: 2, label: '★2',           pct: 0.185, pool: 'all' },
+      { stars: 1, label: '★1',           pct: 0.755, pool: 'all' },
     ],
     tenthGuarantee: true,
   },

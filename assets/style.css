@@ -473,6 +473,50 @@ body {
   color: #4a5d75;
 }
 
+/* ピックアップ生徒チップ */
+.gacha-pickup-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid #c9dcef;
+  border-radius: 2px;
+  background: #f6faff;
+  min-height: 32px;
+  align-items: center;
+}
+
+.gacha-pickup-empty {
+  font-size: 11px;
+  color: #8aa0b8;
+  padding: 2px 4px;
+}
+
+.gacha-pickup-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255,79,139,0.10);
+  color: #c41856;
+  border: 1px solid rgba(255,79,139,0.5);
+}
+
+.gacha-pickup-chip-x {
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.gacha-pickup-chip-x:hover {
+  opacity: 1;
+  color: #f43f5e;
+}
+
 /* モバイルドラワー背景 */
 .sidebar-backdrop {
   display: none;
@@ -872,6 +916,138 @@ body {
   border-color: #128afa;
   background: #ffffff;
   box-shadow: 0 0 0 2px rgba(62,168,255,0.18);
+}
+
+/* ── 所持チェッカー ─────────────────────────────────── */
+.checker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checker-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #c9dcef;
+  border-radius: 4px;
+}
+
+.checker-bulk-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.checker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.checker-group {
+  background: #ffffff;
+  border: 1px solid #c9dcef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.checker-school-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: #f6faff;
+  border-bottom: 1px solid #c9dcef;
+  border-left: 3px solid #3ea8ff;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: #0d1b2a;
+}
+
+.checker-school-name {
+  color: #128afa;
+}
+
+.checker-school-count {
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 12px;
+  color: #4a5d75;
+  font-weight: 700;
+}
+
+.checker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #e6eef8;
+  cursor: pointer;
+  transition: background 0.12s;
+  user-select: none;
+}
+
+.checker-row:last-child {
+  border-bottom: none;
+}
+
+.checker-row:hover {
+  background: rgba(62,168,255,0.05);
+}
+
+.checker-row-owned {
+  background: rgba(16,185,129,0.05);
+}
+
+.checker-row-owned:hover {
+  background: rgba(16,185,129,0.10);
+}
+
+.checker-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #128afa;
+  flex-shrink: 0;
+}
+
+.checker-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0d1b2a;
+}
+
+.checker-row-owned .checker-name {
+  color: #047857;
+}
+
+.checker-stars {
+  font-size: 11px;
+  color: #fbbf24;
+  letter-spacing: -1px;
+  text-shadow: 0 0 4px rgba(251,191,36,0.4);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* 読み取り専用フィールド (マスタデータ表示用) */
+.form-readonly {
+  padding: 7px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  border: 1px solid #e6eef8;
+  border-radius: 2px;
+  background: #f6faff;
+  color: #4a5d75;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
 }
 
 .skill-grid {

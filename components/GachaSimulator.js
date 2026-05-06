@@ -179,28 +179,30 @@ const GachaSimulatorComponent = {
 
   methods: {
     // 1回分の抽選 (内部関数)
-    //   forceMinTwoStar: ★1 を抽選候補から外し、★2 に振り替える (10連目保障用)
+    //   forceMinTwoStar: ★1 を抽選候補から外し、★2 エントリに振り替える (10連目保障用)
     rollOne(forceMinTwoStar = false) {
-      const r = Math.random();
-      const rates = this.rates;
-      let rarity;
-      if (forceMinTwoStar) {
-        rarity = (r < rates.three) ? 3 : 2;
-      } else {
-        if (r < rates.three) rarity = 3;
-        else if (r < rates.three + rates.two) rarity = 2;
-        else rarity = 1;
+      // 有効なエントリ群を構築。10連保障時は ★1 エントリを除外
+      const entries = this.currentMode.rates.filter(e => !forceMinTwoStar || e.stars !== 1);
+      const total = entries.reduce((s, e) => s + e.pct, 0);  // forceMinTwoStar 時は < 1 なので正規化が必要
+      const r = Math.random() * total;
+      let cumulative = 0;
+      let entry = entries[entries.length - 1];
+      for (const e of entries) {
+        cumulative += e.pct;
+        if (r < cumulative) { entry = e; break; }
+      }
+      const rarity = entry.stars;
+
+      // ピティ更新
+      if (rarity === 3) this.stats.pity = 0;
+      else this.stats.pity++;
+
+      // プールから候補を取得 (空なら同レアリティ全体にフォールバック)
+      let candidates = this.poolCandidates(entry);
+      if (candidates.length === 0) {
+        candidates = this.store.students.filter(s => s.rarity === rarity);
       }
 
-      // ピティ (連続非★3カウント) 更新
-      if (rarity === 3) {
-        this.stats.pity = 0;
-      } else {
-        this.stats.pity++;
-      }
-
-      // レアリティ別に生徒マスターから無作為抽出
-      const candidates = this.store.students.filter(s => s.rarity === rarity);
       let name   = '???';
       let school = '';
       if (candidates.length > 0) {
@@ -208,22 +210,45 @@ const GachaSimulatorComponent = {
         name   = picked.name;
         school = picked.school;
       } else if (rarity === 1) {
-        // ★1の生徒マスターが未登録の場合は汎用ラベル
         name = '★1 生徒';
       }
 
-      // 統計加算
+      // 統計
       this.stats.total++;
       if (rarity === 3) {
         this.stats.threeStars++;
-        this.threeStarLog.unshift({ pullNo: this.stats.total, name, school });
+        this.threeStarLog.unshift({ pullNo: this.stats.total, name, school, frame: entry.label });
       } else if (rarity === 2) {
         this.stats.twoStars++;
       } else {
         this.stats.oneStars++;
       }
 
-      return { rarity, name, school };
+      return { rarity, name, school, frame: entry.label };
+    },
+
+    // プール識別子から抽選候補を返す
+    poolCandidates(entry) {
+      const students = this.store.students;
+      const isStar = (s) => s.rarity === entry.stars;
+      const ids = (key) => this.store[key] || [];
+      switch (entry.pool) {
+        case 'pickup':
+          return students.filter(s => isStar(s) && ids('gachaPickupIds').includes(s.id));
+        case 'pickup_fallthrough':
+          return students.filter(s => isStar(s) && !ids('gachaPickupIds').includes(s.id));
+        case 'limited_up':
+          return students.filter(s => isStar(s) && ids('gachaLimitedUpIds').includes(s.id));
+        case 'limited_fallthrough':
+          return students.filter(s => isStar(s) && ids('gachaLimitedFallthroughIds').includes(s.id));
+        case 'other_three':
+          return students.filter(s => isStar(s) &&
+            !ids('gachaLimitedUpIds').includes(s.id) &&
+            !ids('gachaLimitedFallthroughIds').includes(s.id));
+        case 'all':
+        default:
+          return students.filter(isStar);
+      }
     },
 
     pull1() {
@@ -239,9 +264,8 @@ const GachaSimulatorComponent = {
       const results = [];
       const guaranteeOnLast = !!this.currentMode.tenthGuarantee;
       for (let i = 0; i < 10; i++) {
-        // 10連目で ★2/★3 がまだ出ていない場合に最低保障を適用
-        const hasNonOne = results.some(p => p.rarity >= 2);
-        const forceMin  = guaranteeOnLast && i === 9 && !hasNonOne;
+        // 10連目は常に ★2+ 保障 (前9連の結果に関係なく ★1 を排除)
+        const forceMin = guaranteeOnLast && i === 9;
         results.push(this.rollOne(forceMin));
       }
       this.latestPulls = results;

@@ -21,6 +21,7 @@ const store = Vue.reactive({
   // ── ページ別サイドパネル状態 ─────────────────────────
   studentFilters: { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' },
   studentSortKey: 'school',
+  studentView: 'grid',  // 'grid' (カードグリッド) / 'checker' (所持チェッカー)
   resetStudentFilters() {
     this.studentFilters = { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' };
   },
@@ -41,6 +42,10 @@ const store = Vue.reactive({
   },
 
   gachaMode: 'normal',
+  // ガチャ枠の対象生徒ID。プール識別子別に保持
+  gachaPickupIds: [],              // pickup モード: PU★3 対象
+  gachaLimitedUpIds: [],           // limited モード: 周年UP★3 対象 (拡張用、将来UI追加予定)
+  gachaLimitedFallthroughIds: [],  // limited モード: 限定すり抜け対象 (拡張用)
 
   // ── データロード ─────────────────────────────────────────
   async loadStudents() {
@@ -129,6 +134,8 @@ const App = {
             @click="store.activeTab = 'teams'"><span class="tab-glyph">▤</span>編成</button>
           <button class="tab-btn" :class="{ active: store.activeTab === 'materials' }"
             @click="store.activeTab = 'materials'"><span class="tab-glyph">▦</span>素材</button>
+          <button class="tab-btn" :class="{ active: store.activeTab === 'minigame' }"
+            @click="store.activeTab = 'minigame'"><span class="tab-glyph">▷</span>ミニゲーム</button>
         </nav>
       </header>
 
@@ -150,7 +157,8 @@ const App = {
         <!-- ── メインエリア ── -->
         <main id="main-content">
           <div v-if="store.activeTab === 'students'">
-            <student-list></student-list>
+            <student-checker v-if="store.studentView === 'checker'"></student-checker>
+            <student-list v-else></student-list>
           </div>
           <div v-if="store.activeTab === 'gacha'">
             <gacha-simulator></gacha-simulator>
@@ -163,6 +171,11 @@ const App = {
           </div>
           <div v-if="store.activeTab === 'materials'">
             <material-management></material-management>
+          </div>
+          <div v-if="store.activeTab === 'minigame'" class="os-panel" style="text-align:center;padding:60px 20px">
+            <div class="os-section-id">// MINIGAME</div>
+            <div style="font-size:14px;color:#4a5d75;font-weight:700;margin-bottom:6px">準備中</div>
+            <div style="font-size:12px;color:#8aa0b8">ミニゲームは今後追加予定です</div>
           </div>
         </main>
       </div>
@@ -265,6 +278,7 @@ app.config.globalProperties.GACHA_MODES     = GACHA_MODES;
 // コンポーネント登録
 app.component('student-list',        StudentListComponent);
 app.component('student-sidebar',     StudentSidebarComponent);
+app.component('student-checker',     StudentCheckerComponent);
 app.component('student-detail',      StudentDetailComponent);
 app.component('gacha-simulator',     GachaSimulatorComponent);
 app.component('gacha-sidebar',       GachaSidebarComponent);
