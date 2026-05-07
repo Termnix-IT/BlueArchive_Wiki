@@ -1,3 +1,40 @@
+# ── Claude Code / 個人用ドキュメント ──
 .claude/
 CLAUDE.md
 DESIGN.md
+
+# ── OS が自動生成するメタファイル ──
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+# macOS
+.DS_Store
+._*
+# Linux
+*~
+
+# ── エディタ / IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Python (scripts/build-students.py 関連) ──
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ── ログ / 一時ファイル ──
+*.log
+*.bak
+*.backup
+*.tmp
+
+# ── アプリのエクスポート/バックアップファイル ──
+# (個人データを含む。誤コミット防止)
+blueArchive_backup_*.json
