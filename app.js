@@ -22,8 +22,13 @@ const store = Vue.reactive({
   studentFilters: { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' },
   studentSortKey: 'school',
   studentView: 'grid',  // 'grid' (カードグリッド) / 'checker' (所持チェッカー)
+  // Object.assign で既存の reactive オブジェクトを mutate する
+  // (this.foo = {...} の再代入だと v-model 側の双方向バインドが残ることがある)
   resetStudentFilters() {
-    this.studentFilters = { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' };
+    Object.assign(this.studentFilters, {
+      name: '', school: '', role: '', rarity: '', attackType: '', owned: '',
+    });
+    this.studentSortKey = 'school';
   },
 
   memoSelectedId: null,
@@ -33,12 +38,12 @@ const store = Vue.reactive({
   teamMode: 'normal',
   teamFilter: { purpose: '', name: '' },
   resetTeamFilter() {
-    this.teamFilter = { purpose: '', name: '' };
+    Object.assign(this.teamFilter, { purpose: '', name: '' });
   },
 
   materialFilter: { type: '', name: '' },
   resetMaterialFilter() {
-    this.materialFilter = { type: '', name: '' };
+    Object.assign(this.materialFilter, { type: '', name: '' });
   },
 
   gachaMode: 'normal',
@@ -136,6 +141,8 @@ const App = {
             @click="store.activeTab = 'materials'"><span class="tab-glyph">▦</span>素材</button>
           <button class="tab-btn" :class="{ active: store.activeTab === 'minigame' }"
             @click="store.activeTab = 'minigame'"><span class="tab-glyph">▷</span>ミニゲーム</button>
+          <button class="tab-btn" :class="{ active: store.activeTab === 'help' }"
+            @click="store.activeTab = 'help'"><span class="tab-glyph">?</span>使い方</button>
         </nav>
       </header>
 
@@ -148,6 +155,7 @@ const App = {
             <team-sidebar v-if="store.activeTab === 'teams'"></team-sidebar>
             <material-sidebar v-if="store.activeTab === 'materials'"></material-sidebar>
             <gacha-sidebar v-if="store.activeTab === 'gacha'"></gacha-sidebar>
+            <help-sidebar v-if="store.activeTab === 'help'"></help-sidebar>
           </div>
         </aside>
 
@@ -171,6 +179,9 @@ const App = {
           </div>
           <div v-if="store.activeTab === 'materials'">
             <material-management></material-management>
+          </div>
+          <div v-if="store.activeTab === 'help'">
+            <help-guide></help-guide>
           </div>
           <div v-if="store.activeTab === 'minigame'" class="os-panel" style="text-align:center;padding:60px 20px">
             <div class="os-section-id">// MINIGAME</div>
@@ -288,5 +299,7 @@ app.component('team-composition',    TeamCompositionComponent);
 app.component('team-sidebar',        TeamSidebarComponent);
 app.component('material-management', MaterialManagementComponent);
 app.component('material-sidebar',    MaterialSidebarComponent);
+app.component('help-guide',          HelpGuideComponent);
+app.component('help-sidebar',        HelpSidebarComponent);
 
 app.mount('#app');

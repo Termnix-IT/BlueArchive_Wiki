@@ -82,7 +82,7 @@ const StudentSidebarComponent = {
       </div>
 
       <button class="sidebar-reset-btn" @click="store.resetStudentFilters()">
-        リセット
+        フィルタをリセット
       </button>
     </div>
   `,

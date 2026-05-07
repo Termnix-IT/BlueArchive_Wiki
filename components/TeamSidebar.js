@@ -36,7 +36,7 @@ const TeamSidebarComponent = {
       </div>
 
       <button class="sidebar-reset-btn" @click="store.resetTeamFilter()">
-        リセット
+        フィルタをリセット
       </button>
     </div>
   `,

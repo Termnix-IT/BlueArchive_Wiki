@@ -23,7 +23,7 @@ const MaterialSidebarComponent = {
       </div>
 
       <button class="sidebar-reset-btn" @click="store.resetMaterialFilter()">
-        リセット
+        フィルタをリセット
       </button>
     </div>
   `,

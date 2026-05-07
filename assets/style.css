@@ -1182,7 +1182,7 @@ body {
 .student-card-img {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -2478,4 +2478,250 @@ body {
   .form-grid    { grid-template-columns: 1fr; }
   .memo-content-area.split-view { grid-template-columns: 1fr; }
   .skill-grid { grid-template-columns: 1fr 1fr; }
+}
+
+
+/* ============================================================
+   Help Guide (使い方ページ)
+   ============================================================ */
+.help-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.help-guide .help-section { padding: 20px 24px; }
+
+/* ── ヒーロー ── */
+.help-hero {
+  padding: 24px 28px;
+  border-left: 4px solid #3ea8ff;
+  background: linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+}
+.help-hero-title {
+  margin: 8px 0 10px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0d1b2a;
+  letter-spacing: 0.02em;
+}
+.help-hero-lead {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #4a5d75;
+}
+
+/* ── サイドパネル: もくじ ── */
+.help-sidebar-toc {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.help-sidebar-toc li { font-size: 12px; }
+.help-sidebar-toc a {
+  display: block;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5d75;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 2px 2px 0;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+.help-sidebar-toc a:hover {
+  background: #f6faff;
+  color: #128afa;
+  border-left-color: #3ea8ff;
+}
+.help-sidebar-glyph {
+  display: inline-block;
+  width: 14px;
+  color: #ff4f8b;
+  font-weight: 700;
+  margin-right: 4px;
+}
+.help-sidebar-group {
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 10px;
+  font-weight: 800;
+  color: #8aa0b8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 10px 4px;
+  margin-top: 4px;
+  border-top: 1px dashed #c9dcef;
+}
+.help-sidebar-group:first-child { border-top: none; margin-top: 0; }
+
+/* ── 各セクション見出し ── */
+.help-section h3 {
+  margin: 4px 0 12px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0d1b2a;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.help-section h4 {
+  margin: 18px 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0d1b2a;
+  border-left: 3px solid #3ea8ff;
+  padding-left: 8px;
+}
+.help-section p {
+  margin: 6px 0 10px;
+  font-size: 13px;
+  line-height: 1.85;
+  color: #4a5d75;
+}
+.help-glyph {
+  color: #ff4f8b;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ── リスト ── */
+.help-list {
+  margin: 6px 0 4px;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #4a5d75;
+}
+.help-list strong { color: #0d1b2a; font-weight: 700; }
+.help-list ul {
+  margin: 4px 0 4px;
+  padding-left: 18px;
+}
+
+/* ── キーボード/ボタン風表記 ── */
+.help-kbd {
+  display: inline-block;
+  padding: 1px 8px;
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  background: #f6faff;
+  border: 1px solid #c9dcef;
+  border-radius: 2px;
+  color: #128afa;
+  white-space: nowrap;
+}
+
+/* ── コードインライン ── */
+.help-section code {
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 11px;
+  background: #f6faff;
+  border: 1px solid #c9dcef;
+  border-radius: 2px;
+  padding: 1px 6px;
+  color: #128afa;
+}
+
+/* ── コールアウト(注意/補足) ── */
+.help-callout {
+  margin: 12px 0;
+  padding: 12px 16px;
+  background: #f6faff;
+  border-left: 3px solid #3ea8ff;
+  border-radius: 0 4px 4px 0;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: #4a5d75;
+}
+.help-callout strong { color: #0d1b2a; }
+.help-callout--warn {
+  background: #fff8ec;
+  border-left-color: #fbbf24;
+}
+
+/* ── エクスポート2モード比較カード ── */
+.help-mode-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+.help-mode-card {
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1.5px solid #c9dcef;
+  border-radius: 4px;
+}
+.help-mode-card p {
+  margin: 6px 0;
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+.help-mode-title {
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.help-mode-title--replace { color: #f43f5e; }
+.help-mode-title--merge   { color: #10b981; }
+.help-mode-when {
+  margin-top: 8px !important;
+  padding-top: 8px;
+  border-top: 1px dashed #c9dcef;
+  color: #8aa0b8;
+  font-size: 11.5px !important;
+}
+.help-mode-when strong { color: #4a5d75; }
+
+/* ── FAQ ── */
+.help-faq {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.85;
+}
+.help-faq dt {
+  font-weight: 700;
+  color: #0d1b2a;
+  margin-top: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+.help-faq dt::before {
+  content: "Q";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: "SFMono-Regular", "Cascadia Code", Consolas, "MS Gothic", monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  background: #3ea8ff;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 2px;
+  margin-top: 2px;
+}
+.help-faq dd {
+  margin: 4px 0 0 20px;
+  color: #4a5d75;
+}
+
+/* スマホ */
+@media (max-width: 768px) {
+  .help-mode-compare { grid-template-columns: 1fr; }
+  .help-guide .help-section { padding: 16px 18px; }
+  .help-hero { padding: 18px 20px; }
+  .help-hero-title { font-size: 18px; }
 }

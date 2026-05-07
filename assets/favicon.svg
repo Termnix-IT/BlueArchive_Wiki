@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Schale Blue 背景 -->
+  <rect width="32" height="32" fill="#128afa"/>
+  <!-- 白のコーナーブラケット (OSモチーフ) -->
+  <path d="M3 3h7M3 3v7"   stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="square"/>
+  <path d="M29 3h-7M29 3v7" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="square"/>
+  <path d="M3 29h7M3 29v-7" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="square"/>
+  <path d="M29 29h-7M29 29v-7" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="square"/>
+  <!-- ピンクの中央ダイヤ (アクセントカラー) -->
+  <path d="M16 10 L22 16 L16 22 L10 16 Z" fill="#ff4f8b"/>
+</svg>
