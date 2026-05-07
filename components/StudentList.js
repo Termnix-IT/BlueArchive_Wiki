@@ -1,22 +1,7 @@
 // ============================================================
 //  components/StudentList.js  —  生徒一覧（カードグリッド）
+//  学校カラーは data/constants.js の SCHOOL_COLORS / SCHOOL_COLOR_FALLBACK を参照。
 // ============================================================
-
-// Schale OS パレットに合わせ彩度を抑えた学校カラー。
-// 未登録学校はフォールバックのグレーグラデーションで表示される (壊れない)。
-// 新学校追加時はここにエントリを足すと専用カラーが当たる。
-const SCHOOL_COLORS = {
-  'アビドス':        'linear-gradient(160deg, #e8d49a 0%, #c4a868 100%)',
-  'トリニティ':      'linear-gradient(160deg, #f8d4e4 0%, #d8a8c0 100%)',
-  'ゲヘナ':          'linear-gradient(160deg, #e8624a 0%, #b03828 100%)',
-  'ミレニアム':      'linear-gradient(160deg, #6ea4e6 0%, #3870b8 100%)',
-  'アリウス':        'linear-gradient(160deg, #9070c0 0%, #604098 100%)',
-  'レッドウィンター':'linear-gradient(160deg, #c84050 0%, #902028 100%)',
-  '百鬼夜行':        'linear-gradient(160deg, #6e50a0 0%, #443070 100%)',
-  'ヴァルキューレ':  'linear-gradient(160deg, #5868a8 0%, #2c3878 100%)',
-  'SRT特務班':       'linear-gradient(160deg, #5a7a98 0%, #3c5468 100%)',
-  'シャーレ':        'linear-gradient(160deg, #98c8ec 0%, #5a90c8 100%)',
-};
 
 const StudentListComponent = {
   inject: ['store'],
@@ -136,7 +121,7 @@ const StudentListComponent = {
     },
 
     cardImgStyle(s) {
-      const color = SCHOOL_COLORS[s.school] || 'linear-gradient(160deg, #c8d0e0 0%, #a0aab8 100%)';
+      const color = SCHOOL_COLORS[s.school] || SCHOOL_COLOR_FALLBACK;
       return { background: color };
     },
   },

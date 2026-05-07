@@ -21,8 +21,8 @@ Usage:
 
 新学校を追加した場合の影響:
 - フィルタ・グルーピングは自動対応 (動的検出)
-- 表示順を制御したい場合は db.js の SCHOOLS 配列に追加
-- 専用カラーを当てたい場合は components/StudentList.js の SCHOOL_COLORS に追加
+- 表示順を制御したい場合は data/constants.js の SCHOOLS 配列に追加
+- 専用カラーを当てたい場合は data/constants.js の SCHOOL_COLORS に追加
 """
 
 import csv

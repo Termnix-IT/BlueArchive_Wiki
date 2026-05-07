@@ -1,0 +1,170 @@
+// ============================================================
+//  data/constants.js
+//  UI 選択肢・分類・ガチャ排出率など、ドロップダウンや表示で
+//  使う「マスタ的な定数」をここに集約する。
+//
+//  - DB スキーマや CRUD は db.js
+//  - 生徒マスタは data/students.master.json (CSV → JSON)
+//  - このファイルはコードから直接 import せず、グローバル変数として参照する
+//    (file:// 互換のため ES module 不使用)
+//
+//  追加・変更の手順は docs/data-management.md を参照。
+// ============================================================
+
+
+// ─────────────────────────────────────────────────────────────
+//  学校 (SCHOOLS)
+//   ・並びがフィルタ ドロップダウン / 一覧グルーピングの順序になる
+//   ・マスタ JSON にあるが SCHOOLS にない学校はアプリで末尾に並ぶ
+//   ・新学校追加: (1) CSV に行追加 + ビルド
+//                 (2) 表示順を制御したい場合は SCHOOLS に追記
+//                 (3) 専用カラーを当てたい場合は SCHOOL_COLORS に追記
+// ─────────────────────────────────────────────────────────────
+const SCHOOLS = [
+  "アビドス", "トリニティ", "ゲヘナ", "ミレニアム",
+  "アリウス", "ヴァルキューレ", "レッドウィンター",
+  "百鬼夜行", "SRT特務班", "シャーレ", "その他"
+];
+
+// 学校カラー (生徒カードの背景グラデーション)
+//   未登録の学校はフォールバックのグレーグラデーションで表示される
+const SCHOOL_COLORS = {
+  'アビドス':         'linear-gradient(160deg, #e8d49a 0%, #c4a868 100%)',
+  'トリニティ':       'linear-gradient(160deg, #f8d4e4 0%, #d8a8c0 100%)',
+  'ゲヘナ':           'linear-gradient(160deg, #e8624a 0%, #b03828 100%)',
+  'ミレニアム':       'linear-gradient(160deg, #6ea4e6 0%, #3870b8 100%)',
+  'アリウス':         'linear-gradient(160deg, #9070c0 0%, #604098 100%)',
+  'レッドウィンター': 'linear-gradient(160deg, #c84050 0%, #902028 100%)',
+  '百鬼夜行':         'linear-gradient(160deg, #6e50a0 0%, #443070 100%)',
+  'ヴァルキューレ':   'linear-gradient(160deg, #5868a8 0%, #2c3878 100%)',
+  'SRT特務班':        'linear-gradient(160deg, #5a7a98 0%, #3c5468 100%)',
+  'シャーレ':         'linear-gradient(160deg, #98c8ec 0%, #5a90c8 100%)',
+};
+const SCHOOL_COLOR_FALLBACK = 'linear-gradient(160deg, #c8d0e0 0%, #a0aab8 100%)';
+
+
+// ─────────────────────────────────────────────────────────────
+//  役割 (ROLES)
+//   生徒のクラス分類。文字列配列 (value === label)。
+// ─────────────────────────────────────────────────────────────
+const ROLES = ["Attacker", "Defender", "Healer", "Supporter", "T.S."];
+
+
+// ─────────────────────────────────────────────────────────────
+//  攻撃タイプ / 装甲タイプ
+//   { value, label } 形式。value は内部キー、label は UI 表示。
+// ─────────────────────────────────────────────────────────────
+const ATTACK_TYPES = [
+  { value: "explosive", label: "爆発" },
+  { value: "piercing",  label: "貫通" },
+  { value: "mystic",    label: "神秘" },
+  { value: "sonic",     label: "振動" },
+];
+
+const ARMOR_TYPES = [
+  { value: "light",   label: "軽装備" },
+  { value: "heavy",   label: "重装備" },
+  { value: "special", label: "特殊装備" },
+  { value: "elastic", label: "弾力装備" },
+];
+
+
+// ─────────────────────────────────────────────────────────────
+//  攻略メモのカテゴリ
+// ─────────────────────────────────────────────────────────────
+const MEMO_CATEGORIES = [
+  { value: "total_assault", label: "総力戦" },
+  { value: "joint_firing",  label: "大決戦" },
+  { value: "raid",          label: "ホードレイド" },
+  { value: "event",         label: "イベント" },
+  { value: "misc",          label: "その他" },
+];
+
+
+// ─────────────────────────────────────────────────────────────
+//  ガチャモード (GACHA_MODES)
+//   rates[].pool : 抽選プール識別子。GachaSimulator が候補を絞る
+//     'all'                 — 同レアリティ全員
+//     'pickup'              — store.gachaPickupIds に含まれる ★3
+//     'pickup_fallthrough'  — store.gachaPickupIds に含まれない ★3
+//     'limited_up'          — store.gachaLimitedUpIds に含まれる ★3
+//     'limited_fallthrough' — store.gachaLimitedFallthroughIds に含まれる ★3
+//     'other_three'         — limited_up/fallthrough のどれにも含まれない ★3
+//   候補が空のときは同レアリティ全員にフォールバック (シミュレータ側)
+//   tenthGuarantee : 10連目は ★1 を排除して ★2 に振り替え
+//
+//  新モード追加時のチェックリスト:
+//   ・rates の pct 合計が 1.0 になること
+//   ・新しい pool 識別子を作る場合は GachaSimulator.poolCandidates の
+//     switch 文に case を追加する
+// ─────────────────────────────────────────────────────────────
+const GACHA_MODES = [
+  {
+    value: 'normal',
+    label: '通常募集',
+    description: '恒常排出。10連目は★2以上確定',
+    rates: [
+      { stars: 3, label: '★3', pct: 0.030, pool: 'all' },
+      { stars: 2, label: '★2', pct: 0.185, pool: 'all' },
+      { stars: 1, label: '★1', pct: 0.785, pool: 'all' },
+    ],
+    tenthGuarantee: true,
+  },
+  {
+    value: 'pickup',
+    label: 'ピックアップ募集',
+    description: 'PU生徒UP。10連目は★2以上確定',
+    rates: [
+      { stars: 3, label: 'PU★3',       pct: 0.007, pool: 'pickup' },
+      { stars: 3, label: 'すり抜け★3', pct: 0.023, pool: 'pickup_fallthrough' },
+      { stars: 2, label: '★2',          pct: 0.185, pool: 'all' },
+      { stars: 1, label: '★1',          pct: 0.785, pool: 'all' },
+    ],
+    tenthGuarantee: true,
+  },
+  {
+    value: 'limited',
+    label: '期間限定募集',
+    description: 'アニバ・ハーフアニバ ★3=6%',
+    rates: [
+      { stars: 3, label: '周年UP★3',    pct: 0.007, pool: 'limited_up' },
+      { stars: 3, label: '限定すり抜け', pct: 0.009, pool: 'limited_fallthrough' },
+      { stars: 3, label: 'その他★3',    pct: 0.044, pool: 'other_three' },
+      { stars: 2, label: '★2',           pct: 0.185, pool: 'all' },
+      { stars: 1, label: '★1',           pct: 0.755, pool: 'all' },
+    ],
+    tenthGuarantee: true,
+  },
+];
+
+
+// ─────────────────────────────────────────────────────────────
+//  チームモード / 用途
+// ─────────────────────────────────────────────────────────────
+const TEAM_MODES = [
+  { value: 'normal',       label: '通常編成',     striker: 4, special: 2 },
+  { value: 'unrestricted', label: '制約解除決戦', striker: 6, special: 4 },
+];
+
+const TEAM_PURPOSES = [
+  { value: "total_assault", label: "総力戦" },
+  { value: "joint_assault", label: "大決戦" },
+  { value: "joint_firing",  label: "合同火力演習" },
+  { value: "pvp",           label: "カフェテリア" },
+  { value: "other",         label: "その他" },
+];
+
+
+// ─────────────────────────────────────────────────────────────
+//  素材タイプ
+// ─────────────────────────────────────────────────────────────
+const MATERIAL_TYPES = [
+  { value: "equip_t1", label: "装備素材T1" },
+  { value: "equip_t2", label: "装備素材T2" },
+  { value: "equip_t3", label: "装備素材T3" },
+  { value: "equip_t4", label: "装備素材T4" },
+  { value: "skill",    label: "スキル素材" },
+  { value: "credit",   label: "クレジット" },
+  { value: "pyroxene", label: "ピロキセン（石）" },
+  { value: "other",    label: "その他" },
+];
