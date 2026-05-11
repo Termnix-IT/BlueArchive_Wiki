@@ -1,5 +1,6 @@
 id,name,school,class,rarity,attackType,armorType,role,position,weapon,imageUrl
 hoshino,ホシノ,アビドス,タンク,3,explosive,heavy,striker,,,
+hoshino-mizugi,ホシノ（水着）,アビドス,タンク,3,explosive,heavy,striker,,,
 shiroko,シロコ,アビドス,アタッカー,3,piercing,light,striker,,,
 serika,セリカ,アビドス,アタッカー,2,explosive,light,striker,,,
 nonomi,ノノミ,アビドス,サポーター,2,piercing,light,special,,,

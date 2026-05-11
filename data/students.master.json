@@ -12,6 +12,18 @@
     "weapon": ""
   },
   {
+    "id": "hoshino-mizugi",
+    "name": "ホシノ（水着）",
+    "school": "アビドス",
+    "class": "タンク",
+    "rarity": 3,
+    "attackType": "explosive",
+    "armorType": "heavy",
+    "role": "striker",
+    "position": "",
+    "weapon": ""
+  },
+  {
     "id": "shiroko",
     "name": "シロコ",
     "school": "アビドス",
