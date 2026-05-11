@@ -41,17 +41,22 @@ if hasattr(sys.stderr, 'reconfigure'):
 ROOT      = Path(__file__).resolve().parent.parent
 CSV_PATH  = ROOT / 'data' / 'students.master.csv'
 JSON_PATH = ROOT / 'data' / 'students.master.json'
+IMG_DIR   = ROOT / 'assets' / 'students'
+IMG_EXTS  = ('.webp', '.png', '.jpg', '.jpeg')  # 優先順
 
-# enum: db.js の定数と一致させること
-ROLES        = {'Attacker', 'Defender', 'Healer', 'Supporter', 'T.S.', 'Tank'}
-ATTACK_TYPES = {'explosive', 'piercing', 'mystic', 'sonic'}
-ARMOR_TYPES  = {'light', 'heavy', 'special', 'elastic'}
-POSITIONS    = {'striker', 'special'}
+# enum: data/constants.js の定数と一致させること
+CLASSES      = {'アタッカー', 'タンク', 'ヒーラー', 'サポーター', 'T.S'}
+ATTACK_TYPES = {'explosive', 'piercing', 'mystic', 'sonic', 'decomposition'}
+ARMOR_TYPES  = {'light', 'heavy', 'special', 'elastic', 'compositearmor'}
+ROLES        = {'striker', 'special'}
+POSITIONS    = {'FRONT', 'MIDDLE', 'BACK'}
+WEAPONS      = {'HG', 'AR', 'SG', 'SMG', 'SL', 'GL', 'RL', 'FT', 'MT', 'RG'}
 RARITIES     = {1, 2, 3}
 ID_PATTERN   = re.compile(r'^[a-z0-9-]+$')
 
-REQUIRED_COLS = ['id', 'name', 'school', 'role', 'rarity',
-                 'attackType', 'armorType', 'position']
+# class / role / position / weapon は必須列だが、position と weapon は空文字を許容
+REQUIRED_COLS = ['id', 'name', 'school', 'class', 'rarity',
+                 'attackType', 'armorType', 'role', 'position', 'weapon']
 OPTIONAL_COLS = ['imageUrl']
 ALL_COLS      = REQUIRED_COLS + OPTIONAL_COLS
 
@@ -76,14 +81,19 @@ def validate_and_convert(rows):
     out = []
 
     for i, row in enumerate(rows, start=2):  # ヘッダーが1行目なのでデータは2行目から
+        # 全フィールド空の行はスキップ (衣装違いの区切り用の空行を許容)
+        if not any((v or '').strip() for v in row.values()):
+            continue
         rid    = (row.get('id')       or '').strip()
         name   = (row.get('name')     or '').strip()
         school = (row.get('school')   or '').strip()
-        role   = (row.get('role')     or '').strip()
+        cls    = (row.get('class')    or '').strip()
         rstr   = (row.get('rarity')   or '').strip()
         atk    = (row.get('attackType') or '').strip()
         arm    = (row.get('armorType')  or '').strip()
+        role   = (row.get('role')       or '').strip()
         pos    = (row.get('position')   or '').strip()
+        wpn    = (row.get('weapon')     or '').strip()
         img    = (row.get('imageUrl')   or '').strip()
 
         # id
@@ -102,9 +112,9 @@ def validate_and_convert(rows):
         if not school:
             errors.append(f'行{i}: school が空です')
 
-        # role
-        if role not in ROLES:
-            errors.append(f"行{i}: role '{role}' は不正(候補: {sorted(ROLES)})")
+        # class
+        if cls not in CLASSES:
+            errors.append(f"行{i}: class '{cls}' は不正(候補: {sorted(CLASSES)})")
 
         # rarity
         try:
@@ -123,27 +133,47 @@ def validate_and_convert(rows):
         if arm not in ARMOR_TYPES:
             errors.append(f"行{i}: armorType '{arm}' は不正(候補: {sorted(ARMOR_TYPES)})")
 
-        # position
-        if pos not in POSITIONS:
-            errors.append(f"行{i}: position '{pos}' は不正(候補: {sorted(POSITIONS)})")
+        # role (旧 position: ストライカー/スペシャル)
+        if role not in ROLES:
+            errors.append(f"行{i}: role '{role}' は不正(候補: {sorted(ROLES)})")
+
+        # position (FRONT/MIDDLE/BACK, 空可)
+        if pos and pos not in POSITIONS:
+            errors.append(f"行{i}: position '{pos}' は不正(候補: {sorted(POSITIONS)} または空)")
+
+        # weapon (HG/AR/..., 空可)
+        if wpn and wpn not in WEAPONS:
+            errors.append(f"行{i}: weapon '{wpn}' は不正(候補: {sorted(WEAPONS)} または空)")
 
         # 行に致命的エラーが無ければ出力候補に追加
+        pos_ok = (not pos) or (pos in POSITIONS)
+        wpn_ok = (not wpn) or (wpn in WEAPONS)
         if rid and rid in seen_ids and seen_ids[rid] == i and rarity is not None \
-                and role in ROLES and atk in ATTACK_TYPES \
-                and arm in ARMOR_TYPES and pos in POSITIONS \
+                and cls in CLASSES and atk in ATTACK_TYPES \
+                and arm in ARMOR_TYPES and role in ROLES \
+                and pos_ok and wpn_ok \
                 and name and school:
             record = {
                 'id':         rid,
                 'name':       name,
                 'school':     school,
-                'role':       role,
+                'class':      cls,
                 'rarity':     rarity,
                 'attackType': atk,
                 'armorType':  arm,
+                'role':       role,
                 'position':   pos,
+                'weapon':     wpn,
             }
+            # imageUrl 解決: CSV 指定が最優先、なければ assets/students/<id>.<ext> を自動検出
             if img:
                 record['imageUrl'] = img
+            else:
+                for ext in IMG_EXTS:
+                    candidate = IMG_DIR / f'{rid}{ext}'
+                    if candidate.exists():
+                        record['imageUrl'] = f'assets/students/{rid}{ext}'
+                        break
             out.append(record)
 
     return out, errors
@@ -174,8 +204,10 @@ def main():
         return 2
 
     write_json(JSON_PATH, records)
+    with_img    = sum(1 for r in records if r.get('imageUrl'))
+    without_img = len(records) - with_img
     print(f'✓ 検査: OK')
-    print(f'✓ 出力: {JSON_PATH.relative_to(ROOT)} ({len(records)}件)')
+    print(f'✓ 出力: {JSON_PATH.relative_to(ROOT)} ({len(records)}件 / 画像あり {with_img} / 画像なし {without_img})')
     return 0
 
 

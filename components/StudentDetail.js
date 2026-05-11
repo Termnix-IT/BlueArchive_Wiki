@@ -37,8 +37,8 @@ const StudentDetailComponent = {
             <div class="form-readonly">{{ form.school || '—' }}</div>
           </div>
           <div class="form-group">
-            <label>ロール</label>
-            <div class="form-readonly">{{ form.role || '—' }}</div>
+            <label>クラス</label>
+            <div class="form-readonly">{{ form.class || '—' }}</div>
           </div>
           <div class="form-group">
             <label>レアリティ</label>
@@ -53,8 +53,16 @@ const StudentDetailComponent = {
             <div class="form-readonly">{{ armorTypeLabel(form.armorType) }}</div>
           </div>
           <div class="form-group">
+            <label>役割</label>
+            <div class="form-readonly">{{ roleLabel(form.role) }}</div>
+          </div>
+          <div class="form-group">
             <label>位置</label>
-            <div class="form-readonly">{{ form.position === 'striker' ? 'ストライカー' : 'スペシャル' }}</div>
+            <div class="form-readonly">{{ positionLabel(form.position) }}</div>
+          </div>
+          <div class="form-group">
+            <label>使用武器種</label>
+            <div class="form-readonly">{{ weaponLabel(form.weapon) }}</div>
           </div>
 
           <!-- 所持 (育成データ・編集可) -->
@@ -218,11 +226,13 @@ const StudentDetailComponent = {
       return {
         name: '',
         school: '',
-        role: 'Attacker',
+        class: 'アタッカー',
         rarity: 3,
         attackType: 'explosive',
         armorType: 'light',
-        position: 'striker',
+        role: 'striker',
+        position: '',
+        weapon: '',
         owned: false,
         starRank: 1,
         bondLevel: 1,
@@ -302,6 +312,21 @@ const StudentDetailComponent = {
 
     armorTypeLabel(value) {
       const t = ARMOR_TYPES.find(t => t.value === value);
+      return t ? t.label : (value || '—');
+    },
+
+    roleLabel(value) {
+      const t = ROLES.find(t => t.value === value);
+      return t ? t.label : (value || '—');
+    },
+
+    positionLabel(value) {
+      const t = POSITIONS.find(t => t.value === value);
+      return t ? t.label : (value || '—');
+    },
+
+    weaponLabel(value) {
+      const t = WEAPONS.find(t => t.value === value);
       return t ? t.label : (value || '—');
     },
 

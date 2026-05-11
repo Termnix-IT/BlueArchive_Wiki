@@ -19,14 +19,14 @@ const store = Vue.reactive({
   _toastTimer: null,
 
   // ── ページ別サイドパネル状態 ─────────────────────────
-  studentFilters: { name: '', school: '', role: '', rarity: '', attackType: '', owned: '' },
+  studentFilters: { name: '', school: '', class: '', rarity: '', attackType: '', owned: '' },
   studentSortKey: 'school',
   studentView: 'grid',  // 'grid' (カードグリッド) / 'checker' (所持チェッカー)
   // Object.assign で既存の reactive オブジェクトを mutate する
   // (this.foo = {...} の再代入だと v-model 側の双方向バインドが残ることがある)
   resetStudentFilters() {
     Object.assign(this.studentFilters, {
-      name: '', school: '', role: '', rarity: '', attackType: '', owned: '',
+      name: '', school: '', class: '', rarity: '', attackType: '', owned: '',
     });
     this.studentSortKey = 'school';
   },
@@ -277,7 +277,10 @@ const app = Vue.createApp(App);
 
 // テンプレートから参照する定数 (db.js の const はテンプレートスコープに無いので明示的に公開)
 app.config.globalProperties.SCHOOLS         = SCHOOLS;
+app.config.globalProperties.CLASSES         = CLASSES;
 app.config.globalProperties.ROLES           = ROLES;
+app.config.globalProperties.POSITIONS       = POSITIONS;
+app.config.globalProperties.WEAPONS         = WEAPONS;
 app.config.globalProperties.ATTACK_TYPES    = ATTACK_TYPES;
 app.config.globalProperties.ARMOR_TYPES     = ARMOR_TYPES;
 app.config.globalProperties.MEMO_CATEGORIES = MEMO_CATEGORIES;

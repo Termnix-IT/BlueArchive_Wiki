@@ -91,7 +91,7 @@ const TeamCompositionComponent = {
             <span class="team-row-label">ST</span>
             <span v-if="teamStudents(team.strikers).length === 0" class="team-empty-label">未設定</span>
             <span v-for="s in teamStudents(team.strikers)" :key="s.id"
-              class="member-chip member-chip-striker" :title="s.school + ' / ' + s.role">
+              class="member-chip member-chip-striker" :title="s.school + ' / ' + s.class">
               {{ s.name }}
             </span>
           </div>
@@ -101,7 +101,7 @@ const TeamCompositionComponent = {
             <span class="team-row-label">SP</span>
             <span v-if="teamStudents(team.specials).length === 0" class="team-empty-label">未設定</span>
             <span v-for="s in teamStudents(team.specials)" :key="s.id"
-              class="member-chip member-chip-special" :title="s.school + ' / ' + s.role">
+              class="member-chip member-chip-special" :title="s.school + ' / ' + s.class">
               {{ s.name }}
             </span>
           </div>
@@ -140,9 +140,9 @@ const TeamCompositionComponent = {
               @click="toggleMember(s.id)">
               <span style="flex:1;font-weight:700">{{ s.name }}</span>
               <span class="member-row-school">{{ s.school }}</span>
-              <span class="badge" :class="s.position === 'striker' ? 'badge-striker' : 'badge-special-pos'"
+              <span class="badge" :class="s.role === 'striker' ? 'badge-striker' : 'badge-special-pos'"
                 style="margin-left:6px">
-                {{ s.position === 'striker' ? 'ST' : 'SP' }}
+                {{ s.role === 'striker' ? 'ST' : 'SP' }}
               </span>
               <span v-if="!s.owned" class="member-row-tag-unowned">未所持</span>
               <span v-if="isSelected(s.id)" class="member-row-check">✓</span>

@@ -3,410 +3,492 @@
     "id": "hoshino",
     "name": "ホシノ",
     "school": "アビドス",
-    "role": "Defender",
+    "class": "タンク",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "shiroko",
     "name": "シロコ",
     "school": "アビドス",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "piercing",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "serika",
     "name": "セリカ",
     "school": "アビドス",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 2,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "nonomi",
     "name": "ノノミ",
     "school": "アビドス",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 2,
     "attackType": "piercing",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "ayane",
     "name": "アヤネ",
     "school": "アビドス",
-    "role": "Healer",
+    "class": "ヒーラー",
     "rarity": 2,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "hasumi",
     "name": "ハスミ",
     "school": "トリニティ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "hifumi",
     "name": "ヒフミ",
     "school": "トリニティ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "piercing",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "koharu",
     "name": "コハル",
     "school": "トリニティ",
-    "role": "Healer",
+    "class": "ヒーラー",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "heavy",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "hanako",
     "name": "ハナコ",
     "school": "トリニティ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "ako",
     "name": "アコ",
     "school": "トリニティ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "yuuka",
     "name": "ユウカ",
     "school": "トリニティ",
-    "role": "Defender",
+    "class": "タンク",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "tsurugi",
     "name": "ツルギ",
     "school": "トリニティ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "nodoka",
     "name": "ノドカ",
     "school": "トリニティ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "azusa",
     "name": "アズサ",
     "school": "トリニティ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "piercing",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "seia",
     "name": "セイア",
     "school": "トリニティ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "mutsuki",
     "name": "ムツキ",
     "school": "ゲヘナ",
-    "role": "T.S.",
+    "class": "T.S",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "haruna",
     "name": "ハルナ",
     "school": "ゲヘナ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "special",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "kayoko",
     "name": "カヨコ",
     "school": "ゲヘナ",
-    "role": "T.S.",
+    "class": "T.S",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "makoto",
     "name": "マコト",
     "school": "ゲヘナ",
-    "role": "Defender",
+    "class": "タンク",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "karin",
     "name": "カリン",
     "school": "ゲヘナ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "hina",
     "name": "ヒナ",
     "school": "ゲヘナ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "iroha",
     "name": "イロハ",
     "school": "ゲヘナ",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "piercing",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "junko",
     "name": "ジュンコ",
     "school": "ゲヘナ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "arisu",
     "name": "アリス",
     "school": "ミレニアム",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "neru",
     "name": "ネル",
     "school": "ミレニアム",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "hibiki",
     "name": "ヒビキ",
     "school": "ミレニアム",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "cherino",
     "name": "チェリノ",
     "school": "ミレニアム",
-    "role": "Defender",
+    "class": "タンク",
     "rarity": 2,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "izuna",
     "name": "イズナ",
     "school": "ミレニアム",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "piercing",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "kagari",
     "name": "カガリ",
     "school": "ミレニアム",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "suzumi",
     "name": "スズミ",
     "school": "アリウス",
-    "role": "Healer",
+    "class": "ヒーラー",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "asuna",
     "name": "アスナ",
     "school": "アリウス",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "shun",
     "name": "シュン",
     "school": "アリウス",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "maki",
     "name": "マキ",
     "school": "レッドウィンター",
-    "role": "Healer",
+    "class": "ヒーラー",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "michiru",
     "name": "ミチル",
     "school": "レッドウィンター",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "utaha",
     "name": "ウタハ",
     "school": "レッドウィンター",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "hiyori",
     "name": "ヒヨリ",
     "school": "百鬼夜行",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "akane",
     "name": "アカネ",
     "school": "百鬼夜行",
-    "role": "T.S.",
+    "class": "T.S",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "reisa",
     "name": "レイサ",
     "school": "ヴァルキューレ",
-    "role": "Defender",
+    "class": "タンク",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "heavy",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "nagisa",
     "name": "ナギサ",
     "school": "ヴァルキューレ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "saori",
     "name": "サオリ",
     "school": "SRT特務班",
-    "role": "Attacker",
+    "class": "アタッカー",
     "rarity": 3,
     "attackType": "explosive",
     "armorType": "light",
-    "position": "striker"
+    "role": "striker",
+    "position": "",
+    "weapon": ""
   },
   {
     "id": "arona",
     "name": "アロナ",
     "school": "シャーレ",
-    "role": "Supporter",
+    "class": "サポーター",
     "rarity": 3,
     "attackType": "mystic",
     "armorType": "light",
-    "position": "special"
+    "role": "special",
+    "position": "",
+    "weapon": ""
   }
 ]

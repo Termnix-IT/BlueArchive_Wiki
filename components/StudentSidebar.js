@@ -33,10 +33,10 @@ const StudentSidebarComponent = {
       </div>
 
       <div class="sidebar-field">
-        <label>ロール</label>
-        <select v-model="store.studentFilters.role">
-          <option value="">全ロール</option>
-          <option v-for="r in ROLES" :key="r" :value="r">{{ r }}</option>
+        <label>クラス</label>
+        <select v-model="store.studentFilters.class">
+          <option value="">全クラス</option>
+          <option v-for="c in CLASSES" :key="c" :value="c">{{ c }}</option>
         </select>
       </div>
 

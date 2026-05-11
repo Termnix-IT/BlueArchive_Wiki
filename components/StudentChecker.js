@@ -46,8 +46,8 @@ const StudentCheckerComponent = {
             <span class="checker-name">{{ s.name }}</span>
             <span class="checker-stars">{{ '★'.repeat(s.rarity) }}</span>
             <span class="badge" :class="'badge-' + s.attackType">{{ attackLabel(s.attackType) }}</span>
-            <span class="badge" :class="s.position === 'striker' ? 'badge-striker' : 'badge-special-pos'">
-              {{ s.position === 'striker' ? 'ST' : 'SP' }}
+            <span class="badge" :class="s.role === 'striker' ? 'badge-striker' : 'badge-special-pos'">
+              {{ s.role === 'striker' ? 'ST' : 'SP' }}
             </span>
           </label>
         </div>
@@ -61,7 +61,7 @@ const StudentCheckerComponent = {
       return this.store.students.filter(s => {
         if (f.name && !s.name.includes(f.name)) return false;
         if (f.school && s.school !== f.school) return false;
-        if (f.role   && s.role   !== f.role)   return false;
+        if (f.class  && s.class  !== f.class)  return false;
         if (f.rarity && String(s.rarity) !== f.rarity) return false;
         if (f.attackType && s.attackType !== f.attackType) return false;
         if (f.owned !== '') {
