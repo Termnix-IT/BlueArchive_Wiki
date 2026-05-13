@@ -37,19 +37,23 @@ const StudentListComponent = {
               @click.stop="toggleOwned(s)"
             >{{ s.owned ? '●' : '○' }}</button>
 
-            <!-- 攻撃タイプバッジ (右下) -->
-            <span
-              class="student-card-atk badge"
-              :class="'badge-' + s.attackType"
-            >{{ attackLabel(s.attackType) }}</span>
-
             <!-- 絆Lvオーバーレイ (下部) -->
             <div class="student-card-level">Lv.{{ s.bondLevel || 1 }}</div>
           </div>
 
           <!-- カード下部: 名前・星 -->
           <div class="student-card-footer">
-            <div class="student-card-name">{{ s.name }}</div>
+            <div class="student-card-name-row">
+              <div class="student-card-name">{{ s.name }}</div>
+              <span
+                class="student-card-atk badge"
+                :class="'badge-' + s.attackType"
+              >{{ attackLabel(s.attackType) }}</span>
+              <span
+                class="student-card-obt badge"
+                :class="'badge-obt-' + (s.obtainability || 'permanent')"
+              >{{ obtainabilityLabel(s.obtainability) }}</span>
+            </div>
             <div class="student-card-stars">{{ '★'.repeat(s.rarity) }}</div>
           </div>
         </div>
@@ -118,6 +122,11 @@ const StudentListComponent = {
     attackLabel(val) {
       const t = ATTACK_TYPES.find(t => t.value === val);
       return t ? t.label : val;
+    },
+
+    obtainabilityLabel(val) {
+      const t = OBTAINABILITIES.find(t => t.value === val);
+      return t ? t.label : (val || '恒常');
     },
 
     cardImgStyle(s) {

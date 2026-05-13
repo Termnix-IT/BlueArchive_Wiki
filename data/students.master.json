@@ -9,7 +9,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hoshino-mizugi",
@@ -21,7 +22,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "shiroko",
@@ -33,7 +35,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "serika",
@@ -45,7 +48,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "nonomi",
@@ -57,7 +61,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "ayane",
@@ -69,7 +74,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hasumi",
@@ -81,7 +87,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hifumi",
@@ -93,7 +100,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "koharu",
@@ -105,7 +113,8 @@
     "armorType": "heavy",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hanako",
@@ -117,7 +126,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "ako",
@@ -129,7 +139,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "yuuka",
@@ -141,7 +152,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "tsurugi",
@@ -153,7 +165,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "nodoka",
@@ -165,7 +178,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "azusa",
@@ -177,7 +191,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "seia",
@@ -189,7 +204,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "mutsuki",
@@ -201,7 +217,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "haruna",
@@ -213,7 +230,8 @@
     "armorType": "special",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "kayoko",
@@ -225,7 +243,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "makoto",
@@ -237,7 +256,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "karin",
@@ -249,7 +269,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hina",
@@ -261,7 +282,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "iroha",
@@ -273,7 +295,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "junko",
@@ -285,7 +308,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "arisu",
@@ -297,7 +321,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "neru",
@@ -309,7 +334,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hibiki",
@@ -321,7 +347,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "cherino",
@@ -333,7 +360,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "izuna",
@@ -345,7 +373,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "kagari",
@@ -357,7 +386,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "suzumi",
@@ -369,7 +399,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "asuna",
@@ -381,7 +412,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "shun",
@@ -393,7 +425,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "maki",
@@ -405,7 +438,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "michiru",
@@ -417,7 +451,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "utaha",
@@ -429,7 +464,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "hiyori",
@@ -441,7 +477,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "akane",
@@ -453,7 +490,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "reisa",
@@ -465,7 +503,8 @@
     "armorType": "heavy",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "nagisa",
@@ -477,7 +516,8 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "saori",
@@ -489,7 +529,8 @@
     "armorType": "light",
     "role": "striker",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   },
   {
     "id": "arona",
@@ -501,6 +542,7 @@
     "armorType": "light",
     "role": "special",
     "position": "",
-    "weapon": ""
+    "weapon": "",
+    "obtainability": "permanent"
   }
 ]

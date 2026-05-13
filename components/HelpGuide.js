@@ -41,7 +41,8 @@ const HelpGuideComponent = {
           <li><strong>所持の切り替え</strong> ─ カード左上の <span class="help-kbd">○</span>/<span class="help-kbd">●</span> をクリック。所持生徒には青い枠が付きます。</li>
           <li><strong>詳細の編集</strong> ─ カード本体をクリックすると、絆Lv・星ランク・スキルレベル・装備・固有武器・能力開放・必要素材などをまとめて編集できます。</li>
           <li><strong>絞り込み・並び替え</strong> ─ 左のサイドパネルから、学校・役割・レアリティ・攻撃タイプ・所持状況などで絞り込めます。</li>
-          <li><strong>所持チェッカー</strong> ─ サイドパネル上部のトグルから切り替え。学校別の所持率を一覧で確認できます。</li>
+          <li><strong>入手区分バッジ</strong> ─ カードの名前の右に <span class="help-kbd">恒常</span> / <span class="help-kbd">限定</span> / <span class="help-kbd">配布</span> が表示されます。攻撃タイプバッジも同じ位置に並びます。</li>
+          <li><strong>所持チェッカー</strong> ─ サイドパネル上部のトグルから切り替え。学校別の所持率を一覧で確認できます。<strong>学校名をクリックすると、その学校の生徒リストを折りたたんだり展開したりできます</strong>(▶/▼アイコン)。</li>
           <li><strong>画像のアップロード</strong> ─ 詳細画面で生徒の画像を差し替えできます(自動でリサイズされます)。</li>
         </ul>
       </div>

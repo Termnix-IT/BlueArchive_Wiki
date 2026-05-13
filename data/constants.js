@@ -104,6 +104,17 @@ const ATTACK_TYPES = [
   { value: "decomposition", label: "分解" },
 ];
 
+// ─────────────────────────────────────────────────────────────
+//  入手区分 (OBTAINABILITIES)
+//   生徒の入手経路。ガチャ恒常 / ガチャ限定 / イベント等配布。
+//   { value, label } 形式。value は CSV / JSON の internal key。
+// ─────────────────────────────────────────────────────────────
+const OBTAINABILITIES = [
+  { value: "permanent", label: "恒常" },
+  { value: "limited",   label: "限定" },
+  { value: "event",     label: "配布" },
+];
+
 const ARMOR_TYPES = [
   { value: "light", label: "軽装備" },
   { value: "heavy", label: "重装備" },

@@ -51,7 +51,10 @@ data/students.master.csv  →  python scripts/build-students.py  →  data/stude
 | `rarity` | number | レアリティ(1〜3) |
 | `attackType` | string | 攻撃タイプ(`ATTACK_TYPES[i].value`) |
 | `armorType` | string | 装甲タイプ(`ARMOR_TYPES[i].value`) |
-| `position` | string | ポジション(任意) |
+| `class` | string | クラス(`CLASSES` の値) |
+| `position` | string | ポジション(`POSITIONS[i].value`、空可) |
+| `weapon` | string | 使用武器種(`WEAPONS[i].value`、空可) |
+| `obtainability` | string | 入手区分(`OBTAINABILITIES[i].value`: `permanent` / `limited` / `event`) |
 | `imageUrl` | string | 既定画像のURL(空でも可。ユーザーアップロードがあればそちら優先) |
 
 **新生徒を追加するとき**
@@ -75,6 +78,7 @@ ES モジュール非使用のため、各定数はグローバル変数とし�
 | `ROLES` | `string[]` | 役割(value === label) |
 | `ATTACK_TYPES` | `{value,label}[]` | 攻撃タイプ |
 | `ARMOR_TYPES` | `{value,label}[]` | 装甲タイプ |
+| `OBTAINABILITIES` | `{value,label}[]` | 入手区分(恒常/限定/配布) |
 | `MEMO_CATEGORIES` | `{value,label}[]` | 攻略メモのカテゴリ |
 | `GACHA_MODES` | 後述 | ガチャ排出率テーブル |
 | `TEAM_MODES` | `{value,label,striker,special}[]` | 編成モード(枠数) |
@@ -99,6 +103,12 @@ ES モジュール非使用のため、各定数はグローバル変数とし�
 1. `data/constants.js` の `ATTACK_TYPES` / `ARMOR_TYPES` に `{value, label}` を追加
 2. CSV の該当列に新 `value` を入れて再ビルド
 3. バッジ用 CSS(`.badge-<value>`)が必要なら `assets/style.css` に追加
+
+**新しい入手区分を追加したい** (`OBTAINABILITIES`)
+1. `data/constants.js` の `OBTAINABILITIES` に `{value, label}` を追加
+2. `scripts/build-students.py` の `OBTAINS` set にも同じ value を追加
+3. CSV の `obtainability` 列に新 value を入れて再ビルド
+4. バッジ用 CSS(`.badge-obt-<value>`)を `assets/style.css` に追加
 
 **新しいガチャモードを追加したい** (`GACHA_MODES`)
 1. `{value, label, description, rates, tenthGuarantee}` のオブジェクトを追加
@@ -178,6 +188,8 @@ ES モジュール非使用のため、各定数はグローバル変数とし�
 | `materialFilter` | 素材のフィルタ |
 | `gachaMode` / `gachaPickupIds` / `gachaLimitedUpIds` / `gachaLimitedFallthroughIds` | ガチャ募集モードと PU 設定 |
 | `activeTab` | メイン+サイドパネルのタブ切替 |
+| `studentView` | 生徒タブのビュー(`'grid'` / `'checker'`) |
+| `checkerCollapsed` | 所持チェッカーの学校別折りたたみ状態(`{ [school]: true }`) |
 | `students` | マスタ+育成+画像のマージ済み配列(`getAllStudentsMerged()` の結果) |
 
 ---

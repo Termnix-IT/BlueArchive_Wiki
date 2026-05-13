@@ -720,6 +720,11 @@ body {
 .badge-striker     { background: rgba(62,168,255,0.10); color: #128afa; border: 1px solid rgba(62,168,255,0.4); }
 .badge-special-pos { background: rgba(168,85,247,0.10); color: #7e22ce; border: 1px solid rgba(168,85,247,0.4); }
 
+/* 入手区分 */
+.badge-obt-permanent { background: rgba(74,93,117,0.10);  color: #4a5d75; border: 1px solid rgba(74,93,117,0.4); }
+.badge-obt-limited   { background: rgba(255,79,139,0.12); color: #c41856; border: 1px solid rgba(255,79,139,0.5); }
+.badge-obt-event     { background: rgba(16,185,129,0.10); color: #047857; border: 1px solid rgba(16,185,129,0.4); }
+
 /* レアリティ */
 .badge-3star { background: rgba(255,79,139,0.12); color: #c41856; border: 1px solid rgba(255,79,139,0.5); }
 .badge-2star { background: rgba(168,85,247,0.10); color: #7e22ce; border: 1px solid rgba(168,85,247,0.4); }
@@ -969,8 +974,26 @@ body {
   color: #0d1b2a;
 }
 
+.checker-school-header--clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.checker-school-header--clickable:hover {
+  background: #eaf3ff;
+}
+
+.checker-school-toggle {
+  display: inline-block;
+  width: 14px;
+  margin-right: 8px;
+  color: #3ea8ff;
+  font-size: 10px;
+}
+
 .checker-school-name {
   color: #128afa;
+  flex: 1 1 auto;
 }
 
 .checker-school-count {
@@ -1230,14 +1253,11 @@ body {
   background: rgba(13,27,42,0.45);
 }
 
-/* 攻撃タイプバッジ (右下) */
+/* 攻撃タイプバッジ (名前の右) */
 .student-card-atk {
-  position: absolute;
-  bottom: 26px;
-  right: 5px;
-  z-index: 2;
-  font-size: 10px;
-  padding: 1px 5px;
+  flex: 0 0 auto;
+  font-size: 9px;
+  padding: 0 4px;
   line-height: 1.5;
 }
 
@@ -1263,6 +1283,13 @@ body {
   border-top: 1px solid #c9dcef;
 }
 
+.student-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .student-card-name {
   font-size: 13px;
   font-weight: 700;
@@ -1272,6 +1299,15 @@ body {
   text-overflow: ellipsis;
   line-height: 1.4;
   word-break: keep-all;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.student-card-obt {
+  flex: 0 0 auto;
+  font-size: 9px;
+  padding: 0 4px;
+  line-height: 1.5;
 }
 
 .student-card-stars {

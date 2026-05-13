@@ -64,6 +64,10 @@ const StudentDetailComponent = {
             <label>使用武器種</label>
             <div class="form-readonly">{{ weaponLabel(form.weapon) }}</div>
           </div>
+          <div class="form-group">
+            <label>入手区分</label>
+            <div class="form-readonly">{{ obtainabilityLabel(form.obtainability) }}</div>
+          </div>
 
           <!-- 所持 (育成データ・編集可) -->
           <div class="form-group">
@@ -327,6 +331,11 @@ const StudentDetailComponent = {
 
     weaponLabel(value) {
       const t = WEAPONS.find(t => t.value === value);
+      return t ? t.label : (value || '—');
+    },
+
+    obtainabilityLabel(value) {
+      const t = OBTAINABILITIES.find(t => t.value === value);
       return t ? t.label : (value || '—');
     },
 

@@ -155,6 +155,7 @@ async function getAllStudentsMerged() {
       role:       m.role,
       position:   m.position || '',
       weapon:     m.weapon || '',
+      obtainability: m.obtainability || 'permanent',
       // 育成データ (defaults を上書き)
       owned:             user.owned,
       starRank:          user.starRank,

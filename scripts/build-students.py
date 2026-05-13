@@ -51,12 +51,14 @@ ARMOR_TYPES  = {'light', 'heavy', 'special', 'elastic', 'compositearmor'}
 ROLES        = {'striker', 'special'}
 POSITIONS    = {'FRONT', 'MIDDLE', 'BACK'}
 WEAPONS      = {'HG', 'AR', 'SG', 'SMG', 'SL', 'GL', 'RL', 'FT', 'MT', 'RG'}
+OBTAINS      = {'permanent', 'limited', 'event'}
 RARITIES     = {1, 2, 3}
 ID_PATTERN   = re.compile(r'^[a-z0-9-]+$')
 
 # class / role / position / weapon は必須列だが、position と weapon は空文字を許容
 REQUIRED_COLS = ['id', 'name', 'school', 'class', 'rarity',
-                 'attackType', 'armorType', 'role', 'position', 'weapon']
+                 'attackType', 'armorType', 'role', 'position', 'weapon',
+                 'obtainability']
 OPTIONAL_COLS = ['imageUrl']
 ALL_COLS      = REQUIRED_COLS + OPTIONAL_COLS
 
@@ -94,6 +96,7 @@ def validate_and_convert(rows):
         role   = (row.get('role')       or '').strip()
         pos    = (row.get('position')   or '').strip()
         wpn    = (row.get('weapon')     or '').strip()
+        obt    = (row.get('obtainability') or '').strip()
         img    = (row.get('imageUrl')   or '').strip()
 
         # id
@@ -145,13 +148,17 @@ def validate_and_convert(rows):
         if wpn and wpn not in WEAPONS:
             errors.append(f"行{i}: weapon '{wpn}' は不正(候補: {sorted(WEAPONS)} または空)")
 
+        # obtainability (permanent/limited/event)
+        if obt not in OBTAINS:
+            errors.append(f"行{i}: obtainability '{obt}' は不正(候補: {sorted(OBTAINS)})")
+
         # 行に致命的エラーが無ければ出力候補に追加
         pos_ok = (not pos) or (pos in POSITIONS)
         wpn_ok = (not wpn) or (wpn in WEAPONS)
         if rid and rid in seen_ids and seen_ids[rid] == i and rarity is not None \
                 and cls in CLASSES and atk in ATTACK_TYPES \
                 and arm in ARMOR_TYPES and role in ROLES \
-                and pos_ok and wpn_ok \
+                and pos_ok and wpn_ok and obt in OBTAINS \
                 and name and school:
             record = {
                 'id':         rid,
@@ -164,6 +171,7 @@ def validate_and_convert(rows):
                 'role':       role,
                 'position':   pos,
                 'weapon':     wpn,
+                'obtainability': obt,
             }
             # imageUrl 解決: CSV 指定が最優先、なければ assets/students/<id>.<ext> を自動検出
             if img:

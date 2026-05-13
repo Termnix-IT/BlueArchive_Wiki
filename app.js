@@ -22,6 +22,7 @@ const store = Vue.reactive({
   studentFilters: { name: '', school: '', class: '', rarity: '', attackType: '', owned: '' },
   studentSortKey: 'school',
   studentView: 'grid',  // 'grid' (カードグリッド) / 'checker' (所持チェッカー)
+  checkerCollapsed: {},  // 所持チェッカーの学校別折りたたみ状態 { [school]: true }
   // Object.assign で既存の reactive オブジェクトを mutate する
   // (this.foo = {...} の再代入だと v-model 側の双方向バインドが残ることがある)
   resetStudentFilters() {
@@ -283,6 +284,7 @@ app.config.globalProperties.POSITIONS       = POSITIONS;
 app.config.globalProperties.WEAPONS         = WEAPONS;
 app.config.globalProperties.ATTACK_TYPES    = ATTACK_TYPES;
 app.config.globalProperties.ARMOR_TYPES     = ARMOR_TYPES;
+app.config.globalProperties.OBTAINABILITIES = OBTAINABILITIES;
 app.config.globalProperties.MEMO_CATEGORIES = MEMO_CATEGORIES;
 app.config.globalProperties.TEAM_MODES      = TEAM_MODES;
 app.config.globalProperties.TEAM_PURPOSES   = TEAM_PURPOSES;
