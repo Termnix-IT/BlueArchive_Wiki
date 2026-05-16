@@ -2761,3 +2761,269 @@ body {
   .help-hero { padding: 18px 20px; }
   .help-hero-title { font-size: 18px; }
 }
+
+/* ============================================================
+   ミニゲーム
+   ============================================================ */
+.minigame-hub { display: flex; flex-direction: column; gap: 14px; }
+
+.minigame-hero { padding: 18px 22px; }
+.minigame-hero-title {
+  margin: 8px 0 6px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0d1b2a;
+  letter-spacing: 0.02em;
+}
+.minigame-hero-lead {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #4a5d75;
+}
+
+.minigame-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.minigame-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+.minigame-card:hover {
+  border-color: #128afa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(18,138,250,0.10);
+}
+.minigame-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.minigame-card.disabled:hover {
+  border-color: #c9dcef;
+  transform: none;
+  box-shadow: none;
+}
+.minigame-card-glyph {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 28px;
+  color: #128afa;
+  line-height: 1;
+  flex: 0 0 auto;
+  width: 36px;
+  text-align: center;
+}
+.minigame-card-body { flex: 1; min-width: 0; }
+.minigame-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin-bottom: 4px;
+}
+.minigame-card-sub {
+  font-size: 11px;
+  color: #4a5d75;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.minigame-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.minigame-card-hi {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ff4f8b;
+  letter-spacing: 0.04em;
+}
+.os-tag.minigame-coming {
+  color: #8aa0b8;
+  border-color: #c9dcef;
+  background: rgba(138,160,184,0.08);
+}
+
+/* ── ヘイローゲーム本体 ── */
+.minigame-halo { padding: 14px 18px; }
+
+.minigame-hud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  border: 1px solid #c9dcef;
+  border-radius: 4px;
+  background: #f6faff;
+  flex-wrap: wrap;
+}
+.minigame-hud-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 56px;
+}
+.minigame-hud-label {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #8aa0b8;
+}
+.minigame-hud-value {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: #128afa;
+  line-height: 1.1;
+}
+.minigame-hud-next {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #c9dcef;
+}
+.minigame-btn {
+  padding: 5px 12px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border-radius: 2px;
+  border: 1px solid #128afa;
+  background: #128afa;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.minigame-btn:hover { background: #0d6dd1; }
+.minigame-btn-ghost {
+  background: #ffffff;
+  color: #128afa;
+}
+.minigame-btn-ghost:hover { background: rgba(62,168,255,0.10); }
+
+.minigame-canvas-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  background: #ffffff;
+  border: 1.5px solid #3ea8ff;
+  border-radius: 4px;
+  position: relative;
+}
+/* コーナーブラケット */
+.minigame-canvas-wrap::before,
+.minigame-canvas-wrap::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: #ff4f8b;
+  border-style: solid;
+  border-width: 0;
+}
+.minigame-canvas-wrap::before {
+  top: -2px; left: -2px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.minigame-canvas-wrap::after {
+  bottom: -2px; right: -2px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+.minigame-canvas-wrap canvas {
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.minigame-foot { margin-top: 12px; }
+.minigame-foot-toggle {
+  padding: 4px 10px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid #c9dcef;
+  background: #ffffff;
+  color: #4a5d75;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.minigame-foot-toggle:hover { color: #128afa; border-color: #3ea8ff; }
+.minigame-table {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px dashed #c9dcef;
+  border-radius: 4px;
+}
+.minigame-table-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.minigame-table-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.minigame-table-circle {
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.7);
+  box-shadow: 0 0 0 1px #c9dcef;
+}
+.minigame-table-label {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  color: #4a5d75;
+  font-weight: 700;
+}
+.minigame-help {
+  font-size: 11px;
+  color: #4a5d75;
+  line-height: 1.7;
+}
+
+/* ── サイドパネル: ミニゲーム一覧 ── */
+.minigame-sidebar-list .minigame-sidebar-active {
+  background: rgba(62,168,255,0.12) !important;
+  color: #128afa !important;
+  border-left-color: #128afa !important;
+}
+.minigame-sidebar-list .minigame-sidebar-disabled {
+  color: #8aa0b8 !important;
+  cursor: not-allowed;
+}
+.minigame-sidebar-list .minigame-sidebar-disabled:hover {
+  background: transparent !important;
+  border-left-color: transparent !important;
+}
+.minigame-sidebar-tag {
+  float: right;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: #8aa0b8;
+  letter-spacing: 0.04em;
+}

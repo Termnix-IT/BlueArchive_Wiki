@@ -47,6 +47,9 @@ const store = Vue.reactive({
     Object.assign(this.materialFilter, { type: '', name: '' });
   },
 
+  // ミニゲーム: 選択中のゲーム ID (null = ハブ画面)
+  minigameSelected: null,
+
   gachaMode: 'normal',
   // ガチャ枠の対象生徒ID。プール識別子別に保持
   gachaPickupIds: [],              // pickup モード: PU★3 対象
@@ -157,6 +160,7 @@ const App = {
             <material-sidebar v-if="store.activeTab === 'materials'"></material-sidebar>
             <gacha-sidebar v-if="store.activeTab === 'gacha'"></gacha-sidebar>
             <help-sidebar v-if="store.activeTab === 'help'"></help-sidebar>
+            <minigame-sidebar v-if="store.activeTab === 'minigame'"></minigame-sidebar>
           </div>
         </aside>
 
@@ -184,10 +188,9 @@ const App = {
           <div v-if="store.activeTab === 'help'">
             <help-guide></help-guide>
           </div>
-          <div v-if="store.activeTab === 'minigame'" class="os-panel" style="text-align:center;padding:60px 20px">
-            <div class="os-section-id">// MINIGAME</div>
-            <div style="font-size:14px;color:#4a5d75;font-weight:700;margin-bottom:6px">準備中</div>
-            <div style="font-size:12px;color:#8aa0b8">ミニゲームは今後追加予定です</div>
+          <div v-if="store.activeTab === 'minigame'">
+            <minigame-halo v-if="store.minigameSelected === 'halo'"></minigame-halo>
+            <minigame-hub v-else></minigame-hub>
           </div>
         </main>
       </div>
@@ -306,5 +309,8 @@ app.component('material-management', MaterialManagementComponent);
 app.component('material-sidebar',    MaterialSidebarComponent);
 app.component('help-guide',          HelpGuideComponent);
 app.component('help-sidebar',        HelpSidebarComponent);
+app.component('minigame-hub',        MiniGameHubComponent);
+app.component('minigame-halo',       MiniGameHaloSuikaComponent);
+app.component('minigame-sidebar',    MiniGameSidebarComponent);
 
 app.mount('#app');
